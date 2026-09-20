@@ -1,0 +1,23 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+.idea
+Export/
+
+# Mac
+.DS_STORE
+
+# Build output
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Visual Studio
+.vs/
+.vscode
+
+# User-specific files
+*.user
+*.suo
