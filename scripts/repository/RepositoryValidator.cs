@@ -16,7 +16,7 @@ public static class RepositoryValidator {
         int errorCount = 0;
 
         foreach (TId id in ids) {
-            string label = $"{repositoryName}.{id}";
+            string label = $"{repositoryName} {id}";
 
             if (!uids.TryGetValue(id, out string uid)) {
                 AddError($"{label} [MISSING UID]");
