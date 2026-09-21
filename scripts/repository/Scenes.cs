@@ -5,19 +5,19 @@ using Godot;
 
 namespace Repository;
 
-public class Textures : IRepository {
-    private static readonly Dictionary<TextureId, string> _textureUid = new() {
-        { TextureId.Icon, "uid://dmt0k34pglr1a" }
+public class Scenes : IRepository {
+    private static readonly Dictionary<SceneId, string> _sceneUid = new() {
+        { SceneId.MainLevel, "uid://bqhfk8hfk4s4c" }
     };
 
     public static string ValidateUids() {
         StringBuilder errors = new();
         int errorCount = 0;
-        TextureId[] textureIds = Enum.GetValues<TextureId>();
+        SceneId[] sceneIds = Enum.GetValues<SceneId>();
 
-        foreach (TextureId textureId in textureIds) {
-            if (!_textureUid.TryGetValue(textureId, out string uid)) {
-                errors.AppendLine($"Textures.{textureId} [MISSING UID]");
+        foreach (SceneId sceneId in sceneIds) {
+            if (!_sceneUid.TryGetValue(sceneId, out string uid)) {
+                errors.AppendLine($"Scenes.{sceneId} [MISSING UID]");
                 errorCount++;
                 continue;
             }
@@ -25,7 +25,7 @@ public class Textures : IRepository {
             long id = ResourceUid.TextToId(uid);
 
             if (id == ResourceUid.InvalidId || !ResourceUid.HasId(id)) {
-                errors.AppendLine($"Textures.{textureId} [INVALID UID: {uid}]");
+                errors.AppendLine($"Scenes.{sceneId} [INVALID UID: {uid}]");
                 errorCount++;
                 continue;
             }
@@ -36,12 +36,12 @@ public class Textures : IRepository {
                 continue;
             }
 
-            errors.AppendLine($"Textures.{textureId}: Resource missing: '{path}' ({uid}).");
+            errors.AppendLine($"Scenes.{sceneId}: Resource missing: '{path}' ({uid}).");
             errorCount++;
         }
 
         StringBuilder result = new();
-        result.AppendLine($"Texture validation: {textureIds.Length} checked, {errorCount} errors.");
+        result.AppendLine($"Scene validation: {sceneIds.Length} checked, {errorCount} errors.");
 
         if (errorCount > 0) {
             result.Append(errors);
@@ -57,16 +57,16 @@ public class Textures : IRepository {
         int missingCount = 0;
         int invalidCount = 0;
 
-        foreach (TextureId textureId in Enum.GetValues<TextureId>()) {
-            if (!_textureUid.TryGetValue(textureId, out string uid)) {
-                missing.AppendLine($"Texture.{textureId} name [MISSING UID]");
+        foreach (SceneId sceneId in Enum.GetValues<SceneId>()) {
+            if (!_sceneUid.TryGetValue(sceneId, out string uid)) {
+                missing.AppendLine($"Scene.{sceneId} name [MISSING UID]");
                 missingCount++;
                 continue;
             }
 
             long id = ResourceUid.TextToId(uid);
             if (id == ResourceUid.InvalidId || !ResourceUid.HasId(id)) {
-                invalid.AppendLine($"Texture.{textureId} name [INVALID UID: {uid}]");
+                invalid.AppendLine($"Scene.{sceneId} name [INVALID UID: {uid}]");
                 invalidCount++;
                 continue;
             }
@@ -74,7 +74,7 @@ public class Textures : IRepository {
             string path = ResourceUid.GetIdPath(id);
             string name = path.GetFile().GetBaseName();
 
-            valid.AppendLine($"Texture.{textureId} name {name}");
+            valid.AppendLine($"Scene.{sceneId} name {name}");
         }
 
         StringBuilder result = new();
@@ -95,6 +95,6 @@ public class Textures : IRepository {
     }
 }
 
-public enum TextureId {
-    Icon
+public enum SceneId {
+    MainLevel
 }
