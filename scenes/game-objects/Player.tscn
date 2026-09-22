@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bv7rxsv3cd3lc"]
+
+[ext_resource type="Script" uid="uid://cv5ne0gs7pc75" path="res://scripts/Player.cs" id="1_k0rq2"]
+[ext_resource type="Texture2D" uid="uid://dy05anmp87o0t" path="res://assets/PlaceholderPlayer.webp" id="1_sbmd6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4frs6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_sbmd6")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_animatedSprite2D")]
+script = ExtResource("1_k0rq2")
+_animatedSprite2D = NodePath("AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=492322118]
+sprite_frames = SubResource("SpriteFrames_4frs6")
+animation = &"idle"

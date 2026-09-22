@@ -5,7 +5,7 @@ namespace AddOns.Repository;
 public class GameObjects : IRepository<GameObjectId> {
     private static readonly Dictionary<GameObjectId, string> _gameObjectUid = new() {
         {
-            GameObjectId.Player, "uid://bqhfk8hfk4s4c" // TODO: Replace this UID
+            GameObjectId.Player, "uid://bv7rxsv3cd3lc"
         }
     };
 
