@@ -14,10 +14,20 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Node2D" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_animatedSprite2D")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4frs6"]
+size = Vector2(25, 2)
+
+[node name="Node2D" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_animatedSprite2D", "_groundedShapeCast")]
 script = ExtResource("1_k0rq2")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
+_groundedShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=492322118]
 sprite_frames = SubResource("SpriteFrames_4frs6")
 animation = &"idle"
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=1958611204]
+position = Vector2(0, 30)
+shape = SubResource("RectangleShape2D_4frs6")
+target_position = Vector2(0, 2)
+collide_with_areas = true
