@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Repository;
+namespace AddOns.Repository;
 
 public class GameObjects : IRepository<GameObjectId> {
     private static readonly Dictionary<GameObjectId, string> _gameObjectUid = new() {

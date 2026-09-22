@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Repository;
+namespace AddOns.Repository;
 
 public class Textures : IRepository<TextureId> {
     private static readonly Dictionary<TextureId, string> _textureUid = new() {

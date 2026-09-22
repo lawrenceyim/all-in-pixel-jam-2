@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Repository;
+namespace AddOns.Repository;
 
 public class Scenes : IRepository<SceneId> {
     private static readonly Dictionary<SceneId, string> _sceneUid = new() {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Godot;
 
-namespace Repository;
+namespace AddOns.Repository;
 
 public static class RepositoryValidator {
     public static string Validate<TId>(

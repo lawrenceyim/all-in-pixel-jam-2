@@ -1,6 +1,6 @@
 #nullable enable
 using Godot;
-using Repository;
+using AddOns.Repository;
 
 public static class SceneManager {
     private static SceneTree? _sceneTree;
