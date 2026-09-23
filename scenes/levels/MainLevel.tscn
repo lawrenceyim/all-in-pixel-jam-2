@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dmt0k34pglr1a" path="res://assets/sprites/icon.svg" id="1_ngxpg"]
 [ext_resource type="PackedScene" uid="uid://bv7rxsv3cd3lc" path="res://scenes/game-objects/Player.tscn" id="2_mk31d"]
+[ext_resource type="PackedScene" uid="uid://bqokmsdp7olb2" path="res://scenes/game-objects/Door.tscn" id="3_uc4y6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4frs6"]
 size = Vector2(128, 128)
@@ -19,3 +20,7 @@ shape = SubResource("RectangleShape2D_4frs6")
 
 [node name="Player" parent="." unique_id=365774292 instance=ExtResource("2_mk31d")]
 position = Vector2(93, 80)
+
+[node name="Door" parent="." unique_id=1782369364 instance=ExtResource("3_uc4y6")]
+position = Vector2(156, 110)
+_leadsTo = 1
