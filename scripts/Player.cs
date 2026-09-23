@@ -3,12 +3,17 @@ using System.Linq;
 using Godot;
 
 public partial class Player : Node2D {
-    #region PlayerState
+    #region Enums
 
-    public enum State {
+    private enum State {
         Jumping,
         Falling,
         Grounded
+    }
+
+    private enum Sfx {
+        Jump,
+        Swing
     }
 
     #endregion
@@ -16,20 +21,36 @@ public partial class Player : Node2D {
     #region Exports
 
     [Export]
-    private AnimatedSprite2D _animatedSprite2D;
+    private AnimatedSprite2D _playerSprite;
 
     [Export]
     private ShapeCast2D _groundedShapeCast;
 
+    [Export]
+    private AudioStreamPlayer2D _sfxPlayer;
+
+    [Export]
+    private AudioStream _swingSfx;
+
+    [Export]
+    private AudioStream _jumpSfx;
+
+    [Export]
+    private Area2D _interactionHitbox;
+
     #endregion
 
-    private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 200, JumpDuration = .25f, Gravity = 400, MaxFallSpeed = 300 };
+    private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 200, JumpDuration = .25f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
     private Vector2 _velocity = Vector2.Zero;
     private State _state = State.Falling;
     private float _jumpTimeLeft = 0;
+    private IInteractable? _interactable;
+    private int _jumpsLeft = 1;
 
     public override void _Ready() {
         KeyBind.Initialize(); // TODO: Refactor and move elsewhere
+        _interactionHitbox.AreaEntered += _SetInteractable;
+        _interactionHitbox.AreaExited += _ClearInteractable;
     }
 
     public override void _Process(double delta) {
@@ -51,9 +72,18 @@ public partial class Player : Node2D {
 
         _velocity.X = xVelocity * _stats.MoveSpeed;
 
-        if (Input.IsActionJustPressed(KeyBind.Jump)) {
+        if (Input.IsActionJustPressed(KeyBind.Jump) && _jumpsLeft > 0) {
+            _PlaySfx(Sfx.Jump);
+            _state = State.Jumping;
             _velocity.Y = -_stats.JumpSpeed;
             _jumpTimeLeft = _stats.JumpDuration;
+            _jumpsLeft--;
+            GD.Print($"Jumped. State is {_state}. Jump count left {_jumpsLeft}");
+        }
+
+        if (Input.IsActionJustPressed(KeyBind.Action)) {
+            GD.Print($"Action pressed.");
+            _Interact();
         }
     }
 
@@ -63,6 +93,8 @@ public partial class Player : Node2D {
             if (_jumpTimeLeft <= 0) {
                 _state = State.Falling;
             }
+
+            return;
         }
 
         if (_state is State.Falling or State.Grounded) {
@@ -71,6 +103,10 @@ public partial class Player : Node2D {
                 .Any(i => _groundedShapeCast.GetCollider(i) is StaticBody2D);
 
             _state = grounded ? State.Grounded : State.Falling;
+
+            if (_state is State.Grounded) {
+                _jumpsLeft = _stats.NumberOfJumps;
+            }
         }
     }
 
@@ -85,7 +121,38 @@ public partial class Player : Node2D {
     }
 
     private void _Move(double delta) {
-        _animatedSprite2D.GlobalPosition += _velocity * (float)delta;
+        _playerSprite.GlobalPosition += _velocity * (float)delta;
+    }
+
+    private void _PlaySfx(Sfx sfx) {
+        switch (sfx) {
+            case Sfx.Jump:
+                _sfxPlayer.Stream = _jumpSfx;
+                _sfxPlayer.Play();
+                break;
+        }
+    }
+
+    private void _Interact() {
+        if (_interactable != null) {
+            _interactable.Interact();
+        }
+    }
+
+    private void _ClearInteractable(Area2D area) {
+        if (area is IInteractable interactable && interactable == _interactable) {
+            _interactable = null;
+        }
+    }
+
+    private void _ClearInteractable() {
+        _interactable = null;
+    }
+
+    private void _SetInteractable(Area2D area) {
+        if (area is IInteractable interactable) {
+            _interactable = interactable;
+        }
     }
 }
 
@@ -93,6 +160,7 @@ public record struct PlayerStats {
     public float MoveSpeed { get; init; }
     public float JumpSpeed { get; init; }
     public float JumpDuration { get; init; }
+    public int NumberOfJumps { get; init; }
     public float Gravity { get; init; }
     public float MaxFallSpeed { get; init; }
 }

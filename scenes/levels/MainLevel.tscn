@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bqhfk8hfk4s4c"]
 
-[ext_resource type="Texture2D" uid="uid://dmt0k34pglr1a" path="res://assets/icon.svg" id="1_ngxpg"]
+[ext_resource type="Texture2D" uid="uid://dmt0k34pglr1a" path="res://assets/sprites/icon.svg" id="1_ngxpg"]
 [ext_resource type="PackedScene" uid="uid://bv7rxsv3cd3lc" path="res://scenes/game-objects/Player.tscn" id="2_mk31d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4frs6"]
@@ -17,5 +17,5 @@ texture = ExtResource("1_ngxpg")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D" unique_id=114762405]
 shape = SubResource("RectangleShape2D_4frs6")
 
-[node name="Node2D" parent="." unique_id=365774292 instance=ExtResource("2_mk31d")]
-position = Vector2(97, 83)
+[node name="Player" parent="." unique_id=365774292 instance=ExtResource("2_mk31d")]
+position = Vector2(93, 80)
