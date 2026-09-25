@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bqokmsdp7olb2"]
 
-[ext_resource type="Script" uid="uid://d0m4ms4l4jko7" path="res://scripts/interactable/Door.cs" id="1_ee5tx"]
+[ext_resource type="Script" uid="uid://d0m4ms4l4jko7" path="res://scripts/interactable/impl/Door.cs" id="1_ee5tx"]
 [ext_resource type="Texture2D" uid="uid://dmt0k34pglr1a" path="res://assets/sprites/icon.svg" id="1_eqmw6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4frs6"]

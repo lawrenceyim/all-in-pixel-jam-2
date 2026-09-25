@@ -11,6 +11,7 @@ public partial class KeyCard : Area2D, IInteractable {
     private Color _color;
 
     public void Interact() {
+        GD.Print($"Keycard {_color} obtained");
         PlayerData.CardsFound.Add(_color);
         QueueFree();
     }

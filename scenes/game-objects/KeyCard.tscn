@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bbevog6ngdbxw"]
+
+[ext_resource type="Script" uid="uid://c62hndsbq1wvr" path="res://scripts/interactable/impl/KeyCard.cs" id="1_ef2u8"]
+[ext_resource type="Texture2D" uid="uid://dmt0k34pglr1a" path="res://assets/sprites/icon.svg" id="2_8g4xb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4frs6"]
+size = Vector2(10, 14)
+
+[node name="Area2D" type="Area2D" unique_id=5749783]
+script = ExtResource("1_ef2u8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1727538541]
+scale = Vector2(0.078125, 0.109375)
+texture = ExtResource("2_8g4xb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1180177033]
+shape = SubResource("RectangleShape2D_4frs6")
