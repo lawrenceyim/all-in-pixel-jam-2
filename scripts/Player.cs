@@ -47,6 +47,9 @@ public partial class Player : Node2D {
     [Export]
     private Area2D _interactionHitbox;
 
+    [Export]
+    private HealthDisplay _healthDisplay;
+
     #endregion
 
     private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 200, JumpDuration = .25f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
@@ -60,6 +63,7 @@ public partial class Player : Node2D {
         KeyBind.Initialize(); // TODO: Refactor and move elsewhere
         _interactionHitbox.AreaEntered += _SetInteractable;
         _interactionHitbox.AreaExited += _ClearInteractable;
+        _SetHealth(PlayerData.Health);
     }
 
     public override void _Process(double delta) {
@@ -170,8 +174,8 @@ public partial class Player : Node2D {
             // Sprites are facing right by default, so FlipH is false by default
             _playerSprite.FlipH = _velocity.X < 0;
         }
-    
-        
+
+
         // This doesn't account for situations like player damaged. Need to figure out edge case 
         if (_state == State.Grounded) {
             _playerSprite.Animation = _velocity.IsZeroApprox() ? Idle : Walk;
@@ -183,6 +187,11 @@ public partial class Player : Node2D {
             State.Jumping => Idle,
             _ => Idle
         };
+    }
+
+    private void _SetHealth(HealthDisplay.HealthAmount health) {
+        PlayerData.Health = health;
+        _healthDisplay.SetHealth(health);
     }
 }
 

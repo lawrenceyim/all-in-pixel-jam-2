@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://d1nuqfvn6c4m8"]
+
+[ext_resource type="Texture2D" uid="uid://bdh77dil3h1if" path="res://assets/sprites/ui/Health_4.png" id="1_cno72"]
+[ext_resource type="Script" uid="uid://diwy37yqgajix" path="res://scripts/HealthDisplay.cs" id="2_jtkaq"]
+[ext_resource type="Texture2D" uid="uid://doo68tqseqchv" path="res://assets/sprites/ui/Health_3.png" id="3_bam0o"]
+[ext_resource type="Texture2D" uid="uid://nyk5g5e7qvcs" path="res://assets/sprites/ui/Health_2.png" id="4_3h4bw"]
+[ext_resource type="Texture2D" uid="uid://dgevrhpc5tdas" path="res://assets/sprites/ui/Health_1.png" id="5_j4ccj"]
+[ext_resource type="Texture2D" uid="uid://dnrfssnq5ktwe" path="res://assets/sprites/ui/Health_0.png" id="6_8vl38"]
+
+[node name="HealthDisplay" type="Sprite2D" unique_id=427920429]
+texture = ExtResource("1_cno72")
+script = ExtResource("2_jtkaq")
+_healthFour = ExtResource("1_cno72")
+_healthThree = ExtResource("3_bam0o")
+_healthTwo = ExtResource("4_3h4bw")
+_healthOne = ExtResource("5_j4ccj")
+_healthZero = ExtResource("6_8vl38")

@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://cpu6cbcu6sucr" path="res://assets/sfx/lightsaber_swing.mp3" id="2_f2kyb"]
 [ext_resource type="AudioStream" uid="uid://bx26b1qa452fm" path="res://assets/sfx/jump_01.mp3" id="3_tk7xd"]
 [ext_resource type="Texture2D" uid="uid://keoeve6ldvjr" path="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png" id="4_f2kyb"]
+[ext_resource type="PackedScene" uid="uid://d1nuqfvn6c4m8" path="res://scenes/ui/HealthDisplay.tscn" id="5_tk7xd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tk7xd"]
 atlas = ExtResource("4_f2kyb")
@@ -80,7 +81,7 @@ size = Vector2(30, 2)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jamob"]
 size = Vector2(30, 52)
 
-[node name="Player" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_playerSprite", "_groundedShapeCast", "_sfxPlayer", "_interactionHitbox")]
+[node name="Player" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_playerSprite", "_groundedShapeCast", "_sfxPlayer", "_interactionHitbox", "_healthDisplay")]
 script = ExtResource("1_k0rq2")
 _playerSprite = NodePath("AnimatedSprite2D")
 _groundedShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D Grounded")
@@ -88,6 +89,7 @@ _sfxPlayer = NodePath("AnimatedSprite2D/AudioStreamPlayer2D")
 _swingSfx = ExtResource("2_f2kyb")
 _jumpSfx = ExtResource("3_tk7xd")
 _interactionHitbox = NodePath("AnimatedSprite2D/Area2D InteractableHitbox")
+_healthDisplay = NodePath("CanvasLayer/HealthDisplay")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=492322118]
 sprite_frames = SubResource("SpriteFrames_4frs6")
@@ -108,3 +110,8 @@ volume_db = -15.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/Area2D InteractableHitbox" unique_id=777851409]
 position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_jamob")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=872059280]
+
+[node name="HealthDisplay" parent="CanvasLayer" unique_id=427920429 instance=ExtResource("5_tk7xd")]
+position = Vector2(25, 10)
