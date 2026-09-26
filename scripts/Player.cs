@@ -172,21 +172,21 @@ public partial class Player : Node2D {
     private void _SetAnimation() {
         if (_velocity.X != 0) {
             // Sprites are facing right by default, so FlipH is false by default
+            // Edge case, what if there's a knockback effect? Player is knocked back, so they're moving left, but should still be facing right?
             _playerSprite.FlipH = _velocity.X < 0;
         }
 
-
-        // This doesn't account for situations like player damaged. Need to figure out edge case 
-        if (_state == State.Grounded) {
-            _playerSprite.Animation = _velocity.IsZeroApprox() ? Idle : Walk;
-            return;
+        switch (_state) {
+            case State.Grounded:
+                _playerSprite.Animation = _velocity.IsZeroApprox() ? Idle : Walk;
+                break;
+            case State.Falling:
+                // Falling
+                break;
+            case State.Jumping:
+                // Jumping
+                break;
         }
-
-        // TODO: Remove?
-        string name = _state switch {
-            State.Jumping => Idle,
-            _ => Idle
-        };
     }
 
     private void _SetHealth(HealthDisplay.HealthAmount health) {
