@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8kp25gmlh53n"
-path="res://.godot/imported/GreenKeyCard.png-3b2fe6eb83df616ee26740c138c92a22.ctex"
+uid="uid://keoeve6ldvjr"
+path="res://.godot/imported/Hero1_WalkFrames_Aesprite000002-Sheet.png-453c83f1c2ba2efde7369ffdc6a444af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/GreenKeyCard.png"
-dest_files=["res://.godot/imported/GreenKeyCard.png-3b2fe6eb83df616ee26740c138c92a22.ctex"]
+source_file="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png"
+dest_files=["res://.godot/imported/Hero1_WalkFrames_Aesprite000002-Sheet.png-453c83f1c2ba2efde7369ffdc6a444af.ctex"]
 
 [params]
 

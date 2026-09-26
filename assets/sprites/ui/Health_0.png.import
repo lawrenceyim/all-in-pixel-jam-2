@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0rqb5hdjuhk"
-path="res://.godot/imported/RedKeyCard.png-a526b69f505fa8a2fde5789f69f5b776.ctex"
+uid="uid://dnrfssnq5ktwe"
+path="res://.godot/imported/Health_0.png-0c5c4feae84a8453b5702512017c3b81.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/RedKeyCard.png"
-dest_files=["res://.godot/imported/RedKeyCard.png-a526b69f505fa8a2fde5789f69f5b776.ctex"]
+source_file="res://assets/sprites/ui/Health_0.png"
+dest_files=["res://.godot/imported/Health_0.png-0c5c4feae84a8453b5702512017c3b81.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3y82wxixdukp"
-path="res://.godot/imported/BlueKeyCard.png-792c2370818717ddef8c419fe9bd3966.ctex"
+uid="uid://b8kp25gmlh53n"
+path="res://.godot/imported/GreenKeyCard.png-928c10f85136dcd551b4748f8bca6902.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/BlueKeyCard.png"
-dest_files=["res://.godot/imported/BlueKeyCard.png-792c2370818717ddef8c419fe9bd3966.ctex"]
+source_file="res://assets/sprites/game-objects/key-cards/GreenKeyCard.png"
+dest_files=["res://.godot/imported/GreenKeyCard.png-928c10f85136dcd551b4748f8bca6902.ctex"]
 
 [params]
 

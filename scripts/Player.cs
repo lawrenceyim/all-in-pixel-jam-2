@@ -19,6 +19,14 @@ public partial class Player : Node2D {
 
     #endregion
 
+    #region Animation Names
+
+    private const string Walk = "walk";
+    private const string Jump = "jump";
+    private const string Idle = "idle";
+
+    #endregion
+
     #region Exports
 
     [Export]
@@ -59,6 +67,7 @@ public partial class Player : Node2D {
         _Input(delta);
         _Gravity(delta);
         _Move(delta);
+        _SetAnimation();
     }
 
     private void _Input(double delta) {
@@ -154,6 +163,26 @@ public partial class Player : Node2D {
             GD.Print($"Set Interactable {interactable}");
             _interactable = interactable;
         }
+    }
+
+    private void _SetAnimation() {
+        if (_velocity.X != 0) {
+            // Sprites are facing right by default, so FlipH is false by default
+            _playerSprite.FlipH = _velocity.X < 0;
+        }
+    
+        
+        // This doesn't account for situations like player damaged. Need to figure out edge case 
+        if (_state == State.Grounded) {
+            _playerSprite.Animation = _velocity.IsZeroApprox() ? Idle : Walk;
+            return;
+        }
+
+        // TODO: Remove?
+        string name = _state switch {
+            State.Jumping => Idle,
+            _ => Idle
+        };
     }
 }
 
