@@ -8,7 +8,7 @@ public static class SpawnCommands {
             SceneId.MainLevel, []
         }, {
             SceneId.LevelOne, [
-                new SpawnKeyCard(new Vector2(100, 100), KeyCard.Color.Blue, () => !PlayerData.CardsFound.Contains(KeyCard.Color.Blue))
+                new SpawnKeyCard(new Vector2(100, 100), KeyCard.Color.Red, () => !PlayerData.CardsFound.Contains(KeyCard.Color.Blue))
             ]
         },
     };

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://da02q8st3wcul"]
+
+[ext_resource type="Script" uid="uid://cjid6vm4b87yo" path="res://scripts/test/ValidateUids.cs" id="1_w3tx2"]
+
+[node name="ValidateUids" type="Node" unique_id=796922762]
+script = ExtResource("1_w3tx2")

@@ -1,3 +1,4 @@
+using AddOns.Repository;
 using Godot;
 
 public partial class KeyCard : Area2D, IInteractable {
@@ -10,8 +11,17 @@ public partial class KeyCard : Area2D, IInteractable {
     [Export]
     private Color _color;
 
+    [Export]
+    private Sprite2D _sprite;
+
     public void SetColor(Color color) {
-        // TODO: Change texture
+        _color = color;
+        string uid = color switch {
+            Color.Blue => Textures.GetUid(TextureId.BlueKeyCard),
+            Color.Green => Textures.GetUid(TextureId.GreenKeyCard),
+            Color.Red => Textures.GetUid(TextureId.RedKeyCard)
+        };
+        _sprite.Texture = ResourceLoader.Load<Texture2D>(uid);
     }
 
     public void Interact() {
