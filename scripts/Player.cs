@@ -170,7 +170,7 @@ public partial class Player : Node2D {
     }
 
     private void _SetAnimation() {
-        if (_velocity.X != 0) {
+        if (!Mathf.IsZeroApprox(_velocity.X)) {
             // Sprites are facing right by default, so FlipH is false by default
             // Edge case, what if there's a knockback effect? Player is knocked back, so they're moving left, but should still be facing right?
             _playerSprite.FlipH = _velocity.X < 0;
