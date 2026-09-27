@@ -74,6 +74,23 @@ public partial class Player : Node2D {
         _SetAnimation();
     }
 
+    public void Damage(int damage) {
+        int health = Math.Max((int)PlayerData.Health - damage, 0);
+        _SetHealth((HealthDisplay.HealthAmount)health);
+        GD.Print($"Player damaged by {damage} to {PlayerData.Health}");
+    }
+
+    public void Heal(int heal) {
+        int health = Math.Min((int)PlayerData.Health + heal, (int)HealthDisplay.HealthAmount.Four);
+        _SetHealth((HealthDisplay.HealthAmount)health);
+        GD.Print($"Player healed by {heal} to {PlayerData.Health}");
+    }
+
+    public void Kill() {
+        _SetHealth(HealthDisplay.HealthAmount.Zero);
+        GD.Print("Player Killed");
+    }
+
     private void _Input(double delta) {
         float xVelocity = 0;
         if (Input.IsActionPressed(KeyBind.MoveLeft)) {
