@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -15,6 +16,12 @@ public partial class Player : Node2D {
     private enum Sfx {
         Jump,
         Swing
+    }
+
+    private enum Animation {
+        Walk,
+        Jump,
+        Idle,
     }
 
     #endregion
@@ -54,41 +61,56 @@ public partial class Player : Node2D {
 
     private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 200, JumpDuration = .25f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
     private Vector2 _velocity = Vector2.Zero;
-    private State _state = State.Falling;
-    private float _jumpTimeLeft = 0;
+    private double _jumpTimeLeft = 0;
     private IInteractable? _interactable;
     private int _jumpsLeft = 1;
+
+    private Dictionary<State, IPlayerState> _states = new();
+    private IPlayerState _state;
 
     public override void _Ready() {
         KeyBind.Initialize(); // TODO: Refactor and move elsewhere
         _interactionHitbox.AreaEntered += _SetInteractable;
         _interactionHitbox.AreaExited += _ClearInteractable;
         _SetHealth(PlayerData.Health);
+
+        _states[State.Grounded] = new GroundedState(this);
+        _states[State.Falling] = new FallingState(this);
+        _states[State.Jumping] = new JumpingState(this);
+        _ChangeState(State.Grounded);
+        _playerSprite.Play();
     }
 
     public override void _Process(double delta) {
-        _DetermineState(delta);
-        _Input(delta);
-        _Gravity(delta);
-        _Move(delta);
-        _SetAnimation();
+        _state?.Process(delta);
     }
 
     public void Damage(int damage) {
         int health = Math.Max((int)PlayerData.Health - damage, 0);
         _SetHealth((HealthDisplay.HealthAmount)health);
         GD.Print($"Player damaged by {damage} to {PlayerData.Health}");
+        // TODO: Hurt sfx
     }
 
     public void Heal(int heal) {
         int health = Math.Min((int)PlayerData.Health + heal, (int)HealthDisplay.HealthAmount.Four);
         _SetHealth((HealthDisplay.HealthAmount)health);
         GD.Print($"Player healed by {heal} to {PlayerData.Health}");
+        // TODO: Heal sfx
     }
 
     public void Kill() {
         _SetHealth(HealthDisplay.HealthAmount.Zero);
         GD.Print("Player Killed");
+
+        // TODO: Set animation to death
+        // Emit signal to alert game to restart after animation finishes?
+    }
+
+    private void _ChangeState(State state) {
+        _state?.Exit();
+        _state = _states[state];
+        _state?.Enter();
     }
 
     private void _Input(double delta) {
@@ -105,7 +127,6 @@ public partial class Player : Node2D {
 
         if (Input.IsActionJustPressed(KeyBind.Jump) && _jumpsLeft > 0) {
             _PlaySfx(Sfx.Jump);
-            _state = State.Jumping;
             _velocity.Y = -_stats.JumpSpeed;
             _jumpTimeLeft = _stats.JumpDuration;
             _jumpsLeft--;
@@ -116,43 +137,6 @@ public partial class Player : Node2D {
             GD.Print($"Action pressed.");
             _Interact();
         }
-    }
-
-    private void _DetermineState(double delta) {
-        if (_state == State.Jumping) {
-            _jumpTimeLeft -= (float)delta;
-            if (_jumpTimeLeft <= 0) {
-                _state = State.Falling;
-            }
-
-            return;
-        }
-
-        if (_state is State.Falling or State.Grounded) {
-            bool grounded = Enumerable
-                .Range(0, _groundedShapeCast.GetCollisionCount())
-                .Any(i => _groundedShapeCast.GetCollider(i) is StaticBody2D);
-
-            _state = grounded ? State.Grounded : State.Falling;
-
-            if (_state is State.Grounded) {
-                _jumpsLeft = _stats.NumberOfJumps;
-            }
-        }
-    }
-
-    private void _Gravity(double delta) {
-        if (_state != State.Falling) {
-            _velocity.Y = Math.Min(_velocity.Y, 0);
-            return;
-        }
-
-        _velocity.Y += _stats.Gravity * (float)delta;
-        _velocity.Y = Math.Min(_velocity.Y, _stats.MaxFallSpeed);
-    }
-
-    private void _Move(double delta) {
-        _playerSprite.GlobalPosition += _velocity * (float)delta;
     }
 
     private void _PlaySfx(Sfx sfx) {
@@ -186,30 +170,164 @@ public partial class Player : Node2D {
         }
     }
 
-    private void _SetAnimation() {
-        if (!Mathf.IsZeroApprox(_velocity.X)) {
-            // Sprites are facing right by default, so FlipH is false by default
-            // Edge case, what if there's a knockback effect? Player is knocked back, so they're moving left, but should still be facing right?
-            _playerSprite.FlipH = _velocity.X < 0;
-        }
-
-        switch (_state) {
-            case State.Grounded:
-                _playerSprite.Animation = _velocity.IsZeroApprox() ? Idle : Walk;
-                break;
-            case State.Falling:
-                // Falling
-                break;
-            case State.Jumping:
-                // Jumping
-                break;
-        }
-    }
-
     private void _SetHealth(HealthDisplay.HealthAmount health) {
         PlayerData.Health = health;
         _healthDisplay.SetHealth(health);
     }
+
+    #region Shared functions for states
+
+    private void _Move(double delta) {
+        _playerSprite.GlobalPosition += _velocity * (float)delta;
+    }
+
+    private bool _IsGrounded() {
+        return Enumerable
+            .Range(0, _groundedShapeCast.GetCollisionCount())
+            .Any(i => _groundedShapeCast.GetCollider(i) is StaticBody2D);
+    }
+
+    private void _VelocityInput() {
+        float xVelocity = 0;
+        if (Input.IsActionPressed(KeyBind.MoveLeft)) {
+            xVelocity -= 1;
+        }
+
+        if (Input.IsActionPressed(KeyBind.MoveRight)) {
+            xVelocity += 1;
+        }
+
+        _velocity.X = xVelocity * _stats.MoveSpeed;
+    }
+
+    private void _JumpInput() {
+        if (!Input.IsActionJustPressed(KeyBind.Jump) || _jumpsLeft <= 0) {
+            return;
+        }
+
+        _ChangeState(State.Jumping);
+    }
+
+    private void _InteractInput() {
+        if (Input.IsActionJustPressed(KeyBind.Action)) {
+            GD.Print($"Action pressed.");
+            _Interact();
+        }
+    }
+
+    private void _Gravity(double delta) {
+        _velocity.Y += _stats.Gravity * (float)delta;
+        _velocity.Y = Math.Min(_velocity.Y, _stats.MaxFallSpeed);
+    }
+
+    private void _FlipHorizontal() {
+        if (Mathf.IsZeroApprox(_velocity.X)) {
+            return;
+        }
+
+        _playerSprite.FlipH = _velocity.X < 0;
+    }
+
+    private void _SetAnimation(Animation animation) {
+        switch (animation) {
+            case Animation.Walk:
+                // _playerSprite.SpriteFrames.SetAnimationLoopMode(Walk, SpriteFrames.LoopMode.Linear);
+                _playerSprite.Play(Walk);
+                break;
+            case Animation.Idle:
+                _playerSprite.Play(Idle);
+                break;
+        }
+    }
+
+    #endregion
+
+    #region States
+
+    private interface IPlayerState {
+        public State Id();
+        public void Enter();
+        public void Exit();
+        public void Process(double delta);
+    }
+
+    private sealed class GroundedState(Player player) : IPlayerState {
+        public State Id() => State.Grounded;
+
+        public void Enter() {
+            player._jumpsLeft = player._stats.NumberOfJumps;
+        }
+
+        public void Exit() { }
+
+        public void Process(double delta) {
+            if (!player._IsGrounded()) {
+                player._ChangeState(State.Falling);
+            }
+
+            player._VelocityInput();
+            player._JumpInput();
+            player._FlipHorizontal();
+            player._InteractInput();
+            player._SetAnimation(!player._velocity.IsZeroApprox() ? Animation.Walk : Animation.Idle);
+            player._Move(delta);
+        }
+    }
+
+    private sealed class FallingState(Player player) : IPlayerState {
+        public State Id() => State.Falling;
+
+        public void Enter() {
+            // TODO: Set falling animation
+        }
+
+        public void Exit() {
+            player._velocity.Y = 0;
+        }
+
+        public void Process(double delta) {
+            player._Gravity(delta);
+            player._VelocityInput();
+            player._JumpInput();
+            player._InteractInput();
+            player._FlipHorizontal();
+            // TODO: Set animation
+            player._Move(delta);
+            if (player._IsGrounded()) {
+                player._ChangeState(State.Grounded);
+            }
+        }
+    }
+
+    private sealed class JumpingState(Player player) : IPlayerState {
+        public State Id() => State.Jumping;
+
+        public void Enter() {
+            player._PlaySfx(Sfx.Jump);
+            // TODO: Set jump animation
+            player._velocity.Y = -player._stats.JumpSpeed;
+            player._jumpTimeLeft = player._stats.JumpDuration;
+            player._jumpsLeft--;
+            GD.Print($"Jumped. Jump count left {player._jumpsLeft}");
+        }
+
+        public void Exit() { }
+
+        public void Process(double delta) {
+            player._VelocityInput();
+            player._JumpInput();
+            player._FlipHorizontal();
+            player._InteractInput();
+            // TODO: Set animation
+            player._Move(delta);
+            player._jumpTimeLeft -= delta;
+            if (player._jumpTimeLeft <= 0) {
+                player._ChangeState(State.Falling);
+            }
+        }
+    }
+
+    #endregion
 }
 
 public record struct PlayerStats {
