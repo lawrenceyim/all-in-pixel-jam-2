@@ -113,32 +113,6 @@ public partial class Player : Node2D {
         _state?.Enter();
     }
 
-    private void _Input(double delta) {
-        float xVelocity = 0;
-        if (Input.IsActionPressed(KeyBind.MoveLeft)) {
-            xVelocity -= 1;
-        }
-
-        if (Input.IsActionPressed(KeyBind.MoveRight)) {
-            xVelocity += 1;
-        }
-
-        _velocity.X = xVelocity * _stats.MoveSpeed;
-
-        if (Input.IsActionJustPressed(KeyBind.Jump) && _jumpsLeft > 0) {
-            _PlaySfx(Sfx.Jump);
-            _velocity.Y = -_stats.JumpSpeed;
-            _jumpTimeLeft = _stats.JumpDuration;
-            _jumpsLeft--;
-            GD.Print($"Jumped. State is {_state}. Jump count left {_jumpsLeft}");
-        }
-
-        if (Input.IsActionJustPressed(KeyBind.Action)) {
-            GD.Print($"Action pressed.");
-            _Interact();
-        }
-    }
-
     private void _PlaySfx(Sfx sfx) {
         switch (sfx) {
             case Sfx.Jump:
