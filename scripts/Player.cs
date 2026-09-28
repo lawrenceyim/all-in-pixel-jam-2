@@ -161,7 +161,7 @@ public partial class Player : Node2D {
             .Any(i => _groundedShapeCast.GetCollider(i) is StaticBody2D);
     }
 
-    private void _VelocityInput() {
+    private void HorizontalMovementInput() {
         float xVelocity = 0;
         if (Input.IsActionPressed(KeyBind.MoveLeft)) {
             xVelocity -= 1;
@@ -182,7 +182,7 @@ public partial class Player : Node2D {
         _ChangeState(State.Jumping);
     }
 
-    private void _InteractInput() {
+    private void _InteractionInput() {
         if (Input.IsActionJustPressed(KeyBind.Action)) {
             GD.Print($"Action pressed.");
             _Interact();
@@ -194,7 +194,7 @@ public partial class Player : Node2D {
         _velocity.Y = Math.Min(_velocity.Y, _stats.MaxFallSpeed);
     }
 
-    private void _FlipHorizontal() {
+    private void _FlipPlayerSprite() {
         if (Mathf.IsZeroApprox(_velocity.X)) {
             return;
         }
@@ -239,10 +239,10 @@ public partial class Player : Node2D {
                 player._ChangeState(State.Falling);
             }
 
-            player._VelocityInput();
+            player.HorizontalMovementInput();
             player._JumpInput();
-            player._FlipHorizontal();
-            player._InteractInput();
+            player._FlipPlayerSprite();
+            player._InteractionInput();
             player._SetAnimation(!player._velocity.IsZeroApprox() ? Animation.Walk : Animation.Idle);
             player._Move(delta);
         }
@@ -261,10 +261,10 @@ public partial class Player : Node2D {
 
         public void Process(double delta) {
             player._Gravity(delta);
-            player._VelocityInput();
+            player.HorizontalMovementInput();
             player._JumpInput();
-            player._InteractInput();
-            player._FlipHorizontal();
+            player._InteractionInput();
+            player._FlipPlayerSprite();
             // TODO: Set animation
             player._Move(delta);
             if (player._IsGrounded()) {
@@ -288,10 +288,10 @@ public partial class Player : Node2D {
         public void Exit() { }
 
         public void Process(double delta) {
-            player._VelocityInput();
+            player.HorizontalMovementInput();
             player._JumpInput();
-            player._FlipHorizontal();
-            player._InteractInput();
+            player._FlipPlayerSprite();
+            player._InteractionInput();
             // TODO: Set animation
             player._Move(delta);
             player._jumpTimeLeft -= delta;
