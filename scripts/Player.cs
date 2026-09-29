@@ -258,10 +258,15 @@ public partial class Player : Node2D {
 
             player.HorizontalMovementInput();
             player._JumpInput();
+            player._InteractionInput(); // Must be kept at end or else it causes edge case where door animation is started but other code in Process override and soft locks player
+            // alternative approach: use this guard clause
+            if (player._state != this) {
+                return;
+            }
+
             player._FlipPlayerSprite();
             player._SetAnimation(!player._velocity.IsZeroApprox() ? Animation.Walk : Animation.Idle);
             player._Move(delta);
-            player._InteractionInput(); // Must be kept at end or else it causes edge case where door animation is started but other code in Process override and soft locks player
         }
     }
 
@@ -277,17 +282,22 @@ public partial class Player : Node2D {
         }
 
         public void Process(double delta) {
+            if (player._IsGrounded()) {
+                player._ChangeState(State.Grounded);
+                return;
+            }
+
             player._Gravity(delta);
             player.HorizontalMovementInput();
             player._JumpInput();
+            player._InteractionInput();
+            if (player._state != this) {
+                return;
+            }
+
             player._FlipPlayerSprite();
             // TODO: Set animation
             player._Move(delta);
-            if (player._IsGrounded()) {
-                player._ChangeState(State.Grounded);
-            }
-
-            player._InteractionInput();
         }
     }
 
@@ -310,24 +320,34 @@ public partial class Player : Node2D {
             player._JumpInput();
             player._FlipPlayerSprite();
             // TODO: Set animation
+            player._InteractionInput();
+            if (player._state != this) {
+                return;
+            }
+
             player._Move(delta);
             player._jumpTimeLeft -= delta;
             if (player._jumpTimeLeft <= 0) {
                 player._ChangeState(State.Falling);
             }
-
-            player._InteractionInput();
         }
     }
 
     private sealed class EnteringDoorState(Player player) : IPlayerState {
         public State Id() => State.EnteringDoor;
+        private bool _active = false;
 
         public async void Enter() {
             try {
+                _active = true;
                 GD.Print("Player entered EnteringDoor state");
                 player._SetAnimation(Animation.EnteringDoor);
                 await player.ToSignal(player._playerSprite, AnimatedSprite2D.SignalName.AnimationFinished);
+                if (!_active) {
+                    // Edge case for if player is interrupted and state changes. Another animation like hurt animation shouldn't result in scene change.
+                    return;
+                }
+
                 GD.Print("Entered door finished");
                 player.DoorEntered?.Invoke();
             }
@@ -336,7 +356,9 @@ public partial class Player : Node2D {
             }
         }
 
-        public void Exit() { }
+        public void Exit() {
+            _active = false;
+        }
 
         public void Process(double delta) { }
     }
