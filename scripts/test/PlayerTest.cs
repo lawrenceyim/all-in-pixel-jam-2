@@ -1,6 +1,8 @@
 using Godot;
 
 public partial class PlayerTest : Node {
+    #region Exports
+
     [Export]
     private Player _player;
 
@@ -13,10 +15,16 @@ public partial class PlayerTest : Node {
     [Export]
     private Button _killPlayer;
 
+    [Export]
+    private Button _enterDoor;
+
+    #endregion
+
     public override void _Ready() {
         _damagePlayer.Pressed += _DamagePlayer;
         _healPlayer.Pressed += _HealPlayer;
         _killPlayer.Pressed += _KillPlayer;
+        _enterDoor.Pressed += _EnterDoor;
     }
 
     private void _KillPlayer() {
@@ -29,5 +37,9 @@ public partial class PlayerTest : Node {
 
     private void _DamagePlayer() {
         _player.Damage(1);
+    }
+
+    private void _EnterDoor() {
+        _player.EnterDoor();
     }
 }

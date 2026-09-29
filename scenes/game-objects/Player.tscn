@@ -4,7 +4,20 @@
 [ext_resource type="AudioStream" uid="uid://cpu6cbcu6sucr" path="res://assets/sfx/lightsaber_swing.mp3" id="2_f2kyb"]
 [ext_resource type="AudioStream" uid="uid://bx26b1qa452fm" path="res://assets/sfx/jump_01.mp3" id="3_tk7xd"]
 [ext_resource type="Texture2D" uid="uid://keoeve6ldvjr" path="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png" id="4_f2kyb"]
+[ext_resource type="Texture2D" uid="uid://b8416duup3xdl" path="res://assets/sprites/player/HeroEnterDoor.png" id="4_m4re5"]
 [ext_resource type="PackedScene" uid="uid://d1nuqfvn6c4m8" path="res://scenes/ui/HealthDisplay.tscn" id="5_tk7xd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8rp87"]
+atlas = ExtResource("4_m4re5")
+region = Rect2(0, 0, 48, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tc7r0"]
+atlas = ExtResource("4_m4re5")
+region = Rect2(48, 0, 48, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h1bfb"]
+atlas = ExtResource("4_m4re5")
+region = Rect2(96, 0, 48, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tk7xd"]
 atlas = ExtResource("4_f2kyb")
@@ -40,6 +53,20 @@ region = Rect2(282, 0, 47, 50)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4frs6"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8rp87")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tc7r0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h1bfb")
+}],
+"loop": 0,
+"name": &"enter_door",
+"speed": 3.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tk7xd")
@@ -92,8 +119,9 @@ _interactionHitbox = NodePath("AnimatedSprite2D/Area2D InteractableHitbox")
 _healthDisplay = NodePath("CanvasLayer/HealthDisplay")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=492322118]
+z_index = 10
 sprite_frames = SubResource("SpriteFrames_4frs6")
-animation = &"idle"
+animation = &"enter_door"
 autoplay = "idle"
 
 [node name="ShapeCast2D Grounded" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=1958611204]

@@ -24,7 +24,7 @@ public partial class KeyCard : Area2D, IInteractable {
         _sprite.Texture = ResourceLoader.Load<Texture2D>(uid);
     }
 
-    public void Interact() {
+    public void Interact(InteractionContext _) {
         GD.Print($"Keycard {_color} obtained");
         PlayerData.CardsFound.Add(_color);
         QueueFree();

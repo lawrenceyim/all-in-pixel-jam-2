@@ -5,12 +5,19 @@ using System.Linq;
 using Godot;
 
 public partial class Player : Node2D {
+    #region Events
+
+    public event Action DoorEntered;
+
+    #endregion
+
     #region Enums
 
     private enum State {
         Jumping,
         Falling,
-        Grounded
+        Grounded,
+        EnteringDoor
     }
 
     private enum Sfx {
@@ -22,6 +29,7 @@ public partial class Player : Node2D {
         Walk,
         Jump,
         Idle,
+        EnteringDoor,
     }
 
     #endregion
@@ -31,6 +39,7 @@ public partial class Player : Node2D {
     private const string Walk = "walk";
     private const string Jump = "jump";
     private const string Idle = "idle";
+    private const string EnteringDoor = "enter_door";
 
     #endregion
 
@@ -77,6 +86,7 @@ public partial class Player : Node2D {
         _states[State.Grounded] = new GroundedState(this);
         _states[State.Falling] = new FallingState(this);
         _states[State.Jumping] = new JumpingState(this);
+        _states[State.EnteringDoor] = new EnteringDoorState(this);
         _ChangeState(State.Grounded);
         _playerSprite.Play();
     }
@@ -107,23 +117,8 @@ public partial class Player : Node2D {
         // Emit signal to alert game to restart after animation finishes?
     }
 
-    private void _ChangeState(State state) {
-        _state?.Exit();
-        _state = _states[state];
-        _state?.Enter();
-    }
-
-    private void _PlaySfx(Sfx sfx) {
-        switch (sfx) {
-            case Sfx.Jump:
-                _sfxPlayer.Stream = _jumpSfx;
-                _sfxPlayer.Play();
-                break;
-        }
-    }
-
-    private void _Interact() {
-        _interactable?.Interact();
+    public void EnterDoor() {
+        _ChangeState(State.EnteringDoor);
     }
 
     private void _ClearInteractable(Area2D area) {
@@ -150,6 +145,25 @@ public partial class Player : Node2D {
     }
 
     #region Shared functions for states
+
+    private void _ChangeState(State state) {
+        _state?.Exit();
+        _state = _states[state];
+        _state?.Enter();
+    }
+
+    private void _PlaySfx(Sfx sfx) {
+        switch (sfx) {
+            case Sfx.Jump:
+                _sfxPlayer.Stream = _jumpSfx;
+                _sfxPlayer.Play();
+                break;
+        }
+    }
+
+    private void _Interact() {
+        _interactable?.Interact(new PlayerInteractionContext(this));
+    }
 
     private void _Move(double delta) {
         _playerSprite.GlobalPosition += _velocity * (float)delta;
@@ -211,6 +225,9 @@ public partial class Player : Node2D {
             case Animation.Idle:
                 _playerSprite.Play(Idle);
                 break;
+            case Animation.EnteringDoor:
+                _playerSprite.Play(EnteringDoor);
+                break;
         }
     }
 
@@ -242,9 +259,9 @@ public partial class Player : Node2D {
             player.HorizontalMovementInput();
             player._JumpInput();
             player._FlipPlayerSprite();
-            player._InteractionInput();
             player._SetAnimation(!player._velocity.IsZeroApprox() ? Animation.Walk : Animation.Idle);
             player._Move(delta);
+            player._InteractionInput(); // Must be kept at end or else it causes edge case where door animation is started but other code in Process override and soft locks player
         }
     }
 
@@ -263,13 +280,14 @@ public partial class Player : Node2D {
             player._Gravity(delta);
             player.HorizontalMovementInput();
             player._JumpInput();
-            player._InteractionInput();
             player._FlipPlayerSprite();
             // TODO: Set animation
             player._Move(delta);
             if (player._IsGrounded()) {
                 player._ChangeState(State.Grounded);
             }
+
+            player._InteractionInput();
         }
     }
 
@@ -291,14 +309,36 @@ public partial class Player : Node2D {
             player.HorizontalMovementInput();
             player._JumpInput();
             player._FlipPlayerSprite();
-            player._InteractionInput();
             // TODO: Set animation
             player._Move(delta);
             player._jumpTimeLeft -= delta;
             if (player._jumpTimeLeft <= 0) {
                 player._ChangeState(State.Falling);
             }
+
+            player._InteractionInput();
         }
+    }
+
+    private sealed class EnteringDoorState(Player player) : IPlayerState {
+        public State Id() => State.EnteringDoor;
+
+        public async void Enter() {
+            try {
+                GD.Print("Player entered EnteringDoor state");
+                player._SetAnimation(Animation.EnteringDoor);
+                await player.ToSignal(player._playerSprite, AnimatedSprite2D.SignalName.AnimationFinished);
+                GD.Print("Entered door finished");
+                player.DoorEntered?.Invoke();
+            }
+            catch (Exception e) {
+                GD.PrintErr(e);
+            }
+        }
+
+        public void Exit() { }
+
+        public void Process(double delta) { }
     }
 
     #endregion
