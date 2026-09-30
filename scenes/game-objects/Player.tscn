@@ -61,7 +61,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"enter_door",
-"speed": 3.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -114,8 +114,10 @@ _healthDisplay = NodePath("CanvasLayer/HealthDisplay")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=492322118]
 z_index = 10
 sprite_frames = SubResource("SpriteFrames_4frs6")
-animation = &"walk"
+animation = &"enter_door"
 autoplay = "idle"
+frame = 2
+frame_progress = 1.0
 
 [node name="ShapeCast2D Grounded" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=1958611204]
 position = Vector2(0, 25)
