@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 
 public partial class Player : Node2D {
@@ -341,8 +342,18 @@ public partial class Player : Node2D {
             try {
                 _active = true;
                 GD.Print("Player entered EnteringDoor state");
+
+                Task animationFinished = _WaitForSignal(player._playerSprite, AnimatedSprite2D.SignalName.AnimationFinished);
+                // Task audioFinished = _WaitForSignal(player._sfxPlayer, AudioStreamPlayer2D.SignalName.Finished);
+
                 player._SetAnimation(Animation.EnteringDoor);
-                await player.ToSignal(player._playerSprite, AnimatedSprite2D.SignalName.AnimationFinished);
+                // player._sfxPlayer.Play(); // TODO: create function to play a specific SFX
+
+                await Task.WhenAll(
+                    // audioFinished,
+                    animationFinished
+                );
+
                 if (!_active) {
                     // Edge case for if player is interrupted and state changes. Another animation like hurt animation shouldn't result in scene change.
                     return;
@@ -354,6 +365,10 @@ public partial class Player : Node2D {
             catch (Exception e) {
                 GD.PrintErr(e);
             }
+        }
+
+        private async Task _WaitForSignal(GodotObject source, StringName signal) {
+            await player.ToSignal(source, signal);
         }
 
         public void Exit() {
