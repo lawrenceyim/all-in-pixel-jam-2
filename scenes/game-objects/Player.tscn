@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cv5ne0gs7pc75" path="res://scripts/Player.cs" id="1_k0rq2"]
 [ext_resource type="AudioStream" uid="uid://cpu6cbcu6sucr" path="res://assets/sfx/lightsaber_swing.mp3" id="2_f2kyb"]
-[ext_resource type="AudioStream" uid="uid://bx26b1qa452fm" path="res://assets/sfx/jump_01.mp3" id="3_tk7xd"]
+[ext_resource type="AudioStream" uid="uid://2y63gdvq6ddg" path="res://assets/sfx/sfx_player_jump.mp3" id="3_m4re5"]
 [ext_resource type="Texture2D" uid="uid://keoeve6ldvjr" path="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png" id="4_f2kyb"]
 [ext_resource type="Texture2D" uid="uid://b8416duup3xdl" path="res://assets/sprites/player/HeroEnterDoor.png" id="4_m4re5"]
 [ext_resource type="PackedScene" uid="uid://d1nuqfvn6c4m8" path="res://scenes/ui/HealthDisplay.tscn" id="5_tk7xd"]
@@ -107,7 +107,7 @@ _playerSprite = NodePath("AnimatedSprite2D")
 _groundedShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D Grounded")
 _sfxPlayer = NodePath("AnimatedSprite2D/AudioStreamPlayer2D")
 _swingSfx = ExtResource("2_f2kyb")
-_jumpSfx = ExtResource("3_tk7xd")
+_jumpSfx = ExtResource("3_m4re5")
 _interactionHitbox = NodePath("AnimatedSprite2D/Area2D InteractableHitbox")
 _healthDisplay = NodePath("CanvasLayer/HealthDisplay")
 
