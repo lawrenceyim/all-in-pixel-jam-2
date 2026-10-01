@@ -96,6 +96,10 @@ public partial class Player : Node2D {
         _state?.Process(delta);
     }
 
+    public override void _PhysicsProcess(double delta) {
+        _state?.PhysicsProcess(delta);
+    }
+
     public void Damage(int damage) {
         int health = Math.Max((int)PlayerData.Health - damage, 0);
         _SetHealth((HealthDisplay.HealthAmount)health);
@@ -241,6 +245,7 @@ public partial class Player : Node2D {
         public void Enter();
         public void Exit();
         public void Process(double delta);
+        public void PhysicsProcess(double delta);
     }
 
     private sealed class GroundedState(Player player) : IPlayerState {
@@ -253,10 +258,6 @@ public partial class Player : Node2D {
         public void Exit() { }
 
         public void Process(double delta) {
-            if (!player._IsGrounded()) {
-                player._ChangeState(State.Falling);
-            }
-
             player.HorizontalMovementInput();
             player._JumpInput();
             player._InteractionInput(); // Must be kept at end or else it causes edge case where door animation is started but other code in Process override and soft locks player
@@ -267,6 +268,13 @@ public partial class Player : Node2D {
 
             player._FlipPlayerSprite();
             player._SetAnimation(!player._velocity.IsZeroApprox() ? Animation.Walk : Animation.Idle);
+        }
+
+        public void PhysicsProcess(double delta) {
+            if (!player._IsGrounded()) {
+                player._ChangeState(State.Falling);
+            }
+
             player._Move(delta);
         }
     }
@@ -298,6 +306,9 @@ public partial class Player : Node2D {
 
             player._FlipPlayerSprite();
             // TODO: Set animation
+        }
+
+        public void PhysicsProcess(double delta) {
             player._Move(delta);
         }
     }
@@ -322,10 +333,9 @@ public partial class Player : Node2D {
             player._FlipPlayerSprite();
             // TODO: Set animation
             player._InteractionInput();
-            if (player._state != this) {
-                return;
-            }
+        }
 
+        public void PhysicsProcess(double delta) {
             player._Move(delta);
             player._jumpTimeLeft -= delta;
             if (player._jumpTimeLeft <= 0) {
@@ -376,6 +386,7 @@ public partial class Player : Node2D {
         }
 
         public void Process(double delta) { }
+        public void PhysicsProcess(double delta) { }
     }
 
     #endregion
