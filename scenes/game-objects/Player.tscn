@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://keoeve6ldvjr" path="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png" id="4_f2kyb"]
 [ext_resource type="Texture2D" uid="uid://b8416duup3xdl" path="res://assets/sprites/player/HeroEnterDoor.png" id="4_m4re5"]
 [ext_resource type="PackedScene" uid="uid://d1nuqfvn6c4m8" path="res://scenes/ui/HealthDisplay.tscn" id="5_tk7xd"]
+[ext_resource type="Texture2D" uid="uid://b0p5mjf8tyy86" path="res://assets/sprites/player/Jump.png" id="6_85dwl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8rp87"]
 atlas = ExtResource("4_m4re5")
@@ -22,6 +23,22 @@ region = Rect2(96, 0, 48, 50)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tk7xd"]
 atlas = ExtResource("4_f2kyb")
 region = Rect2(0, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_totgw"]
+atlas = ExtResource("6_85dwl")
+region = Rect2(5, 0, 51, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5jsn"]
+atlas = ExtResource("6_85dwl")
+region = Rect2(147, 0, 51, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nv05w"]
+atlas = ExtResource("6_85dwl")
+region = Rect2(289, 0, 51, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pgn1g"]
+atlas = ExtResource("6_85dwl")
+region = Rect2(431, 0, 51, 34)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_85dwl"]
 atlas = ExtResource("4_f2kyb")
@@ -73,6 +90,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_totgw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5jsn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nv05w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pgn1g")
+}],
+"loop": 1,
+"name": &"jump",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_85dwl")
 }, {
 "duration": 1.0,
@@ -108,16 +142,15 @@ _groundedShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D Grounded")
 _sfxPlayer = NodePath("AnimatedSprite2D/AudioStreamPlayer2D")
 _swingSfx = ExtResource("2_f2kyb")
 _jumpSfx = ExtResource("3_m4re5")
-_interactionHitbox = NodePath("AnimatedSprite2D/Area2D InteractableHitbox")
+_interactionHitbox = NodePath("AnimatedSprite2D/Upright Hitbox")
 _healthDisplay = NodePath("CanvasLayer/HealthDisplay")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=492322118]
 z_index = 10
 sprite_frames = SubResource("SpriteFrames_4frs6")
-animation = &"enter_door"
+animation = &"jump"
 autoplay = "idle"
-frame = 2
-frame_progress = 1.0
+frame_progress = 0.8130775
 
 [node name="ShapeCast2D Grounded" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=1958611204]
 position = Vector2(0, 25)
@@ -128,9 +161,9 @@ collide_with_areas = true
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="AnimatedSprite2D" unique_id=1932262434]
 volume_db = -15.0
 
-[node name="Area2D InteractableHitbox" type="Area2D" parent="AnimatedSprite2D" unique_id=973127812]
+[node name="Upright Hitbox" type="Area2D" parent="AnimatedSprite2D" unique_id=973127812]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/Area2D InteractableHitbox" unique_id=777851409]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/Upright Hitbox" unique_id=777851409]
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_jamob")
 

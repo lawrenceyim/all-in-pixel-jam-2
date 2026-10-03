@@ -69,7 +69,7 @@ public partial class Player : Node2D {
 
     #endregion
 
-    private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 100, JumpDuration = .25f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
+    private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 100, JumpDuration = .5f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
     private Vector2 _velocity = Vector2.Zero;
     private double _jumpTimeLeft = 0;
     private IInteractable? _interactable;
@@ -233,6 +233,9 @@ public partial class Player : Node2D {
             case Animation.EnteringDoor:
                 _playerSprite.Play(EnteringDoor);
                 break;
+            case Animation.Jump:
+                _playerSprite.Play(Jump);
+                break;
         }
     }
 
@@ -283,6 +286,7 @@ public partial class Player : Node2D {
         public State Id() => State.Falling;
 
         public void Enter() {
+            player._SetAnimation(Animation.Idle);
             // TODO: Set falling animation
         }
 
@@ -318,7 +322,7 @@ public partial class Player : Node2D {
 
         public void Enter() {
             player._PlaySfx(Sfx.Jump);
-            // TODO: Set jump animation
+            player._SetAnimation(Animation.Jump);
             player._velocity.Y = -player._stats.JumpSpeed;
             player._jumpTimeLeft = player._stats.JumpDuration;
             player._jumpsLeft--;
