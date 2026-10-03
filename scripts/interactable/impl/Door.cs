@@ -1,7 +1,11 @@
+using System.Threading.Tasks;
 using AddOns.Repository;
 using Godot;
 
 public partial class Door : Area2D, IInteractable {
+    [Export]
+    private AnimatedSprite2D _sprite;
+
     [Export]
     private Vector2 _spawnPosition;
 
@@ -17,21 +21,38 @@ public partial class Door : Area2D, IInteractable {
     [Export]
     private AudioStream _unlockingSfx;
 
+    private enum Animation {
+        Open,
+        Close
+    }
+
+    private const string Open = "open";
+    private const string Close = "close";
+
     public void Interact(InteractionContext interactionContext) {
         if (interactionContext is not PlayerInteractionContext playerContext) {
             GD.PrintErr("Interaction context is not PlayerInteractionContext in Door");
             return;
         }
 
-        // TODO: if unlocked
         if (PlayerData.DoorsUnlocked.Contains(_color)) {
-            playerContext.Player.DoorEntered += () => {
+            playerContext.Player.DoorEntered += async () => {
+                Task animationTask = _WaitForSignal(_sprite, AnimatedSprite2D.SignalName.AnimationFinished);
+                // Task _ = _WaitForSignal() // door SFX
+                _PlayAnimation(Animation.Open);
+
+                await Task.WhenAll(
+                    animationTask
+                );
+
                 Callable.From(() => {
                     {
                         _ = EventManager.MoveScene(_leadsTo, _spawnPosition);
                     }
                 }).CallDeferred();
             };
+
+            // TODO: play entering door sfx
             playerContext?.Player.EnterDoor();
             return;
         }
@@ -44,5 +65,20 @@ public partial class Door : Area2D, IInteractable {
         PlayerData.DoorsUnlocked.Add(_color);
         _sfxPlayer.Stream = _unlockingSfx;
         _sfxPlayer.Play();
+    }
+
+    private async Task _WaitForSignal(GodotObject source, StringName signal) {
+        await ToSignal(source, signal);
+    }
+
+    private void _PlayAnimation(Animation animation) {
+        switch (animation) {
+            case Animation.Open:
+                _sprite.Play(Open);
+                break;
+            case Animation.Close:
+                _sprite.Play(Close);
+                break;
+        }
     }
 }
