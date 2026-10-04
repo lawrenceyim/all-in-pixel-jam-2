@@ -56,6 +56,9 @@ public partial class Player : Node2D {
     private ShapeCast2D _groundedShapeCast;
 
     [Export]
+    private ShapeCast2D _wallShapeCast;
+
+    [Export]
     private AudioStreamPlayer2D _sfxPlayer;
 
     [Export]
@@ -137,7 +140,7 @@ public partial class Player : Node2D {
     }
 
     public async Task FoundKey(KeyCard keyCard, KeyCard.Color color) {
-        Sprite2D card = keyCard.GetSprite();
+        Sprite2D sprite = keyCard.GetSprite();
         Sprite2D icon = color switch {
             KeyCard.Color.Red => _redKeyCard,
             KeyCard.Color.Green => _greenKeyCard,
@@ -145,23 +148,23 @@ public partial class Player : Node2D {
         };
 
         // Move the card into the icon's CanvasLayer while preserving its current screen position, size, and rotation.
-        Transform2D screenTransform = card.GetGlobalTransformWithCanvas();
+        Transform2D screenTransform = sprite.GetGlobalTransformWithCanvas();
         CanvasLayer layer = icon.GetCanvasLayerNode();
 
-        if (card.GetParent() != layer) {
-            card.Reparent(layer, false);
+        if (sprite.GetParent() != layer) {
+            sprite.Reparent(layer, false);
         }
 
-        card.GlobalTransform = card.GetCanvasTransform().AffineInverse() * screenTransform;
-        Vector2 destination = card.GetCanvasTransform().AffineInverse() * icon.GetGlobalTransformWithCanvas().Origin;
-        Tween flightTween = card.CreateTween().SetParallel(true);
-        float duration = .5f;
-        float spins = 5;
-        flightTween.TweenProperty(card, Node2D.PropertyName.GlobalPosition.ToString(), destination, duration);
-        flightTween.TweenProperty(card, Node2D.PropertyName.Rotation.ToString(), card.Rotation + Mathf.Tau * spins, duration);
+        sprite.GlobalTransform = sprite.GetCanvasTransform().AffineInverse() * screenTransform;
+        Vector2 destination = sprite.GetCanvasTransform().AffineInverse() * icon.GetGlobalTransformWithCanvas().Origin;
+        Tween flightTween = sprite.CreateTween().SetParallel(true);
+        const float duration = .5f;
+        const float spins = 5;
+        flightTween.TweenProperty(sprite, Node2D.PropertyName.GlobalPosition.ToString(), destination, duration);
+        flightTween.TweenProperty(sprite, Node2D.PropertyName.Rotation.ToString(), sprite.Rotation + Mathf.Tau * spins, duration);
 
         await ToSignal(flightTween, Tween.SignalName.Finished);
-        card.QueueFree();
+        keyCard.QueueFree();
         _InitKeyCardsFound();
     }
 
@@ -231,13 +234,27 @@ public partial class Player : Node2D {
     }
 
     private void _Move(double delta) {
-        _playerSprite.GlobalPosition += _velocity * (float)delta;
+        Vector2 movement = _velocity * (float)delta;
+
+        if (!Mathf.IsZeroApprox(movement.X)) {
+            _wallShapeCast.TargetPosition = new Vector2(movement.X, 0f);
+            _wallShapeCast.ForceShapecastUpdate();
+
+            float safeFraction =
+                _wallShapeCast.GetClosestCollisionSafeFraction();
+
+            movement.X *= safeFraction;
+
+            if (safeFraction < 1f) {
+                _velocity.X = 0f;
+            }
+        }
+
+        _playerSprite.GlobalPosition += movement;
     }
 
     private bool _IsGrounded() {
-        return Enumerable
-            .Range(0, _groundedShapeCast.GetCollisionCount())
-            .Any(i => _groundedShapeCast.GetCollider(i) is StaticBody2D);
+        return _groundedShapeCast.IsColliding();
     }
 
     private void HorizontalMovementInput() {
