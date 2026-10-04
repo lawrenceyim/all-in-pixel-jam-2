@@ -136,6 +136,35 @@ public partial class Player : Node2D {
         // Emit signal to alert game to restart after animation finishes?
     }
 
+    public async Task FoundKey(KeyCard keyCard, KeyCard.Color color) {
+        Sprite2D card = keyCard.GetSprite();
+        Sprite2D icon = color switch {
+            KeyCard.Color.Red => _redKeyCard,
+            KeyCard.Color.Green => _greenKeyCard,
+            KeyCard.Color.Blue => _blueKeyCard,
+        };
+
+        // Move the card into the icon's CanvasLayer while preserving its current screen position, size, and rotation.
+        Transform2D screenTransform = card.GetGlobalTransformWithCanvas();
+        CanvasLayer layer = icon.GetCanvasLayerNode();
+
+        if (card.GetParent() != layer) {
+            card.Reparent(layer, false);
+        }
+
+        card.GlobalTransform = card.GetCanvasTransform().AffineInverse() * screenTransform;
+        Vector2 destination = card.GetCanvasTransform().AffineInverse() * icon.GetGlobalTransformWithCanvas().Origin;
+        Tween flightTween = card.CreateTween().SetParallel(true);
+        float duration = .5f;
+        float spins = 5;
+        flightTween.TweenProperty(card, Node2D.PropertyName.GlobalPosition.ToString(), destination, duration);
+        flightTween.TweenProperty(card, Node2D.PropertyName.Rotation.ToString(), card.Rotation + Mathf.Tau * spins, duration);
+
+        await ToSignal(flightTween, Tween.SignalName.Finished);
+        card.QueueFree();
+        _InitKeyCardsFound();
+    }
+
     public void EnterDoor() {
         _ChangeState(State.EnteringDoor);
     }
