@@ -31,6 +31,7 @@ public partial class Player : Node2D {
         Jump,
         Idle,
         EnteringDoor,
+        Fall,
     }
 
     #endregion
@@ -41,6 +42,7 @@ public partial class Player : Node2D {
     private const string Jump = "jump";
     private const string Idle = "idle";
     private const string EnteringDoor = "enter_door";
+    private const string Fall = "fall";
 
     #endregion
 
@@ -236,6 +238,9 @@ public partial class Player : Node2D {
             case Animation.Jump:
                 _playerSprite.Play(Jump);
                 break;
+            case Animation.Fall:
+                _playerSprite.Play(Fall);
+                break;
         }
     }
 
@@ -286,7 +291,7 @@ public partial class Player : Node2D {
         public State Id() => State.Falling;
 
         public void Enter() {
-            player._SetAnimation(Animation.Idle);
+            player._SetAnimation(Animation.Fall);
             // TODO: Set falling animation
         }
 

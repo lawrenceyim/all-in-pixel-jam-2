@@ -129,7 +129,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"open",
-"speed": 8.0
+"speed": 16.0
 }]
 
 [node name="Door" type="Area2D" unique_id=1782369364 node_paths=PackedStringArray("_sprite", "_sfxPlayer")]

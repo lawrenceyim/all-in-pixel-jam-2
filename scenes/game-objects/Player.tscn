@@ -20,6 +20,10 @@ region = Rect2(48, 0, 48, 50)
 atlas = ExtResource("4_m4re5")
 region = Rect2(96, 0, 48, 50)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmjmo"]
+atlas = ExtResource("6_85dwl")
+region = Rect2(0, 0, 70, 34)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_tk7xd"]
 atlas = ExtResource("4_f2kyb")
 region = Rect2(0, 0, 47, 50)
@@ -78,7 +82,15 @@ animations = [{
 }],
 "loop": 0,
 "name": &"enter_door",
-"speed": 6.0
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmjmo")
+}],
+"loop": 1,
+"name": &"fall",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -148,9 +160,8 @@ _healthDisplay = NodePath("CanvasLayer/HealthDisplay")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=492322118]
 z_index = 10
 sprite_frames = SubResource("SpriteFrames_4frs6")
-animation = &"jump"
+animation = &"fall"
 autoplay = "idle"
-frame_progress = 0.8130775
 
 [node name="ShapeCast2D Grounded" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=1958611204]
 position = Vector2(0, 25)
