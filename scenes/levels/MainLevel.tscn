@@ -25,6 +25,7 @@ position = Vector2(93, 80)
 [node name="Door" parent="." unique_id=1782369364 instance=ExtResource("3_uc4y6")]
 position = Vector2(154, 115)
 _leadsTo = 1
+_colors = Array[int]([0])
 
 [node name="Area2D" parent="." unique_id=5749783 instance=ExtResource("4_xvlhx")]
 position = Vector2(64, 136)

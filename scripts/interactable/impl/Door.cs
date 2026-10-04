@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
 using AddOns.Repository;
 using Godot;
+using Godot.Collections;
 
 public partial class Door : Area2D, IInteractable {
     [Export]
@@ -13,7 +15,7 @@ public partial class Door : Area2D, IInteractable {
     private SceneId _leadsTo;
 
     [Export]
-    private KeyCard.Color _color;
+    private Array<KeyCard.Color> _colors;
 
     [Export]
     private AudioStreamPlayer2D _sfxPlayer;
@@ -35,7 +37,7 @@ public partial class Door : Area2D, IInteractable {
             return;
         }
 
-        if (PlayerData.DoorsUnlocked.Contains(_color)) {
+        if (_HaveAllCards()) {
             playerContext.Player.DoorEntered += async () => {
                 Task animationTask = _WaitForSignal(_sprite, AnimatedSprite2D.SignalName.AnimationFinished);
                 // Task _ = _WaitForSignal() // door SFX
@@ -57,14 +59,20 @@ public partial class Door : Area2D, IInteractable {
             return;
         }
 
-        if (!PlayerData.CardsFound.Contains(_color)) {
-            return;
-        }
+        // TODO: incorrect SFX
 
-        // unlocking sfx
-        PlayerData.DoorsUnlocked.Add(_color);
-        _sfxPlayer.Stream = _unlockingSfx;
-        _sfxPlayer.Play();
+        // if (!PlayerData.CardsFound.Contains(_color)) {
+        //     return;
+        // }
+        //
+        // // unlocking sfx
+        // PlayerData.DoorsUnlocked.Add(_color);
+        // _sfxPlayer.Stream = _unlockingSfx;
+        // _sfxPlayer.Play();
+    }
+
+    private bool _HaveAllCards() {
+        return _colors.All(color => PlayerData.CardsFound.Contains(color));
     }
 
     private async Task _WaitForSignal(GodotObject source, StringName signal) {

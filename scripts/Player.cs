@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AddOns.Repository;
 using Godot;
 
 public partial class Player : Node2D {
@@ -69,6 +70,15 @@ public partial class Player : Node2D {
     [Export]
     private HealthDisplay _healthDisplay;
 
+    [Export]
+    private Sprite2D _redKeyCard;
+
+    [Export]
+    private Sprite2D _greenKeyCard;
+
+    [Export]
+    private Sprite2D _blueKeyCard;
+
     #endregion
 
     private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 100, JumpDuration = .5f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
@@ -92,6 +102,8 @@ public partial class Player : Node2D {
         _states[State.EnteringDoor] = new EnteringDoorState(this);
         _ChangeState(State.Grounded);
         _playerSprite.Play();
+
+        _InitKeyCardsFound();
     }
 
     public override void _Process(double delta) {
@@ -149,6 +161,23 @@ public partial class Player : Node2D {
     private void _SetHealth(HealthDisplay.HealthAmount health) {
         PlayerData.Health = health;
         _healthDisplay.SetHealth(health);
+    }
+
+    private void _InitKeyCardsFound() {
+        if (PlayerData.CardsFound.Contains(KeyCard.Color.Red)) {
+            string uid = Textures.GetUid(TextureId.RedKeyCard);
+            _redKeyCard.Texture = GD.Load<Texture2D>(uid);
+        }
+
+        if (PlayerData.CardsFound.Contains(KeyCard.Color.Green)) {
+            string uid = Textures.GetUid(TextureId.GreenKeyCard);
+            _greenKeyCard.Texture = GD.Load<Texture2D>(uid);
+        }
+
+        if (PlayerData.CardsFound.Contains(KeyCard.Color.Blue)) {
+            string uid = Textures.GetUid(TextureId.BlueKeyCard);
+            _blueKeyCard.Texture = GD.Load<Texture2D>(uid);
+        }
     }
 
     #region Shared functions for states
