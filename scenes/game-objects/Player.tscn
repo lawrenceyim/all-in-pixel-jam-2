@@ -160,7 +160,7 @@ _ceilingShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D Ceiling")
 _sfxPlayer = NodePath("AnimatedSprite2D/AudioStreamPlayer2D")
 _swingSfx = ExtResource("2_f2kyb")
 _jumpSfx = ExtResource("3_m4re5")
-_interactionHitbox = NodePath("AnimatedSprite2D/Upright Hitbox")
+_interactionHitbox = NodePath("AnimatedSprite2D/Interaction Area2D")
 _healthDisplay = NodePath("CanvasLayer/HealthDisplay")
 _redKeyCard = NodePath("CanvasLayer/Node2D/Red")
 _greenKeyCard = NodePath("CanvasLayer/Node2D/Green")
@@ -189,9 +189,9 @@ collide_with_areas = true
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="AnimatedSprite2D" unique_id=1932262434]
 volume_db = -15.0
 
-[node name="Upright Hitbox" type="Area2D" parent="AnimatedSprite2D" unique_id=973127812]
+[node name="Interaction Area2D" type="Area2D" parent="AnimatedSprite2D" unique_id=973127812]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/Upright Hitbox" unique_id=777851409]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/Interaction Area2D" unique_id=777851409]
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_jamob")
 

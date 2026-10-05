@@ -182,13 +182,13 @@ public partial class Player : Node2D {
     }
 
     private void _ClearInteractable() {
-        GD.Print("Cleared Interactable");
+        // GD.Print("Cleared Interactable");
         _interactable = null;
     }
 
     private void _SetInteractable(Area2D area) {
         if (area is IInteractable interactable) {
-            GD.Print($"Set Interactable {interactable}");
+            // GD.Print($"Set Interactable {interactable}");
             _interactable = interactable;
         }
     }

@@ -2,7 +2,7 @@ using Godot;
 
 public static class GameObjectManager {
     public static Node Add(Node parent, string sceneName, SpawnOptions spawnOptions) {
-        GD.Print($"GameObjectManager::Add({sceneName}, {spawnOptions})");
+        // GD.Print($"GameObjectManager::Add({sceneName}, {spawnOptions})");
         PackedScene packedScene = GD.Load<PackedScene>(sceneName);
         Node node = packedScene.Instantiate();
         parent.AddChild(node);

@@ -1,6 +1,5 @@
-using Godot;
-using System;
 using AddOns.Repository;
+using Godot;
 
 public partial class MainMenu : Node {
     public override void _Ready() {
@@ -8,10 +7,12 @@ public partial class MainMenu : Node {
     }
 
     private void _StartGame() {
-        Callable.From(() => {
-            _ = EventManager.MoveScene(SceneId.B, new SpawnOptions {
-                Position = new Vector2(130, -30)
-            });
+        Callable.From(async () => {
+            string uid = Scenes.GetUid(SceneId.Tutorial);
+            SceneTree tree = (SceneTree)Engine.GetMainLoop();
+            await tree.ToSignal(tree, SceneTree.SignalName.ProcessFrame);
+            tree.UnloadCurrentScene();
+            tree.ChangeSceneToFile(uid);
         }).CallDeferred();
     }
 }

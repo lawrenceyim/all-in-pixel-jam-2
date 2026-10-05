@@ -4,8 +4,7 @@ namespace AddOns.Repository;
 
 public class Scenes : IRepository<SceneId> {
     private static readonly Dictionary<SceneId, string> _sceneUid = new() {
-        { SceneId.A, "uid://d2s15qnsdfpl" },
-        { SceneId.B, "uid://bqhfk8hfk4s4c" },
+        { SceneId.Tutorial, "uid://dfm8mvk6vjyoh" },
     };
 
     public static string ValidateUids() => RepositoryValidator.Validate(_sceneUid, nameof(Scenes));
@@ -31,5 +30,6 @@ public enum SceneId {
     M,
     N,
     O,
-    Goal
+    Goal,
+    Tutorial,
 }

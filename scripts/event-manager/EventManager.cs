@@ -25,7 +25,7 @@ public static class EventManager {
 
 
         List<ISceneCommand> commands = SpawnCommands.GetCommands(sceneId);
-        GD.Print($"EventManager MoveScene {sceneId} Spawn Command count {commands.Count}");
+        // GD.Print($"EventManager MoveScene {sceneId} Spawn Command count {commands.Count}");
         foreach (ISceneCommand command in commands) {
             GD.Print(command.ToString());
             command.Execute(scene);
