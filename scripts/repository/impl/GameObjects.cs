@@ -5,7 +5,8 @@ namespace AddOns.Repository;
 public class GameObjects : IRepository<GameObjectId> {
     private static readonly Dictionary<GameObjectId, string> _gameObjectUid = new() {
         { GameObjectId.Player, "uid://bv7rxsv3cd3lc" },
-        { GameObjectId.KeyCard, "uid://bbevog6ngdbxw" }
+        { GameObjectId.KeyCard, "uid://bbevog6ngdbxw" },
+        { GameObjectId.Door, "uid://bqokmsdp7olb2" },
     };
 
     public static string ValidateUids() => RepositoryValidator.Validate(_gameObjectUid, nameof(GameObjects));
@@ -18,4 +19,5 @@ public class GameObjects : IRepository<GameObjectId> {
 public enum GameObjectId {
     Player = 1,
     KeyCard = 2,
+    Door = 3,
 }

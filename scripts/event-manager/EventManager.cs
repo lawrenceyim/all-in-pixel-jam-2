@@ -20,18 +20,15 @@ public static class EventManager {
         Dictionary<Vector2, TileId> tiles = RoomTiles.GetTiles(sceneId);
         TileMapLayer tileMap = TileMapFactory.CreateTileMap(tiles);
         scene.AddChild(tileMap);
-        // OLD        
-        // SceneManager.Unload();
-        // Node scene = await SceneManager.LoadScene(sceneId);
-        //
-        // // Spawn player
-        // GameObjectManager.Add(scene, GameObjects.GetUid(GameObjectId.Player), spawnOptions);
-        //
-        // List<ISceneCommand> commands = SpawnCommands.GetCommands(sceneId);
-        // GD.Print($"EventManager MoveScene {sceneId} Spawn Command count {commands.Count}");
-        // foreach (ISceneCommand command in commands) {
-        //     GD.Print(command.ToString());
-        //     command.Execute(scene);
-        // }
+
+        Doors.SpawnDoors(scene, sceneId);
+
+
+        List<ISceneCommand> commands = SpawnCommands.GetCommands(sceneId);
+        GD.Print($"EventManager MoveScene {sceneId} Spawn Command count {commands.Count}");
+        foreach (ISceneCommand command in commands) {
+            GD.Print(command.ToString());
+            command.Execute(scene);
+        }
     }
 }

@@ -1,21 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AddOns.Repository;
 using Godot;
-using Godot.Collections;
 
 public partial class Door : Area2D, IInteractable {
     [Export]
     private AnimatedSprite2D _sprite;
-
-    [Export]
-    private Vector2 _spawnPosition;
-
-    [Export]
-    private SceneId _leadsTo;
-
-    [Export]
-    private Array<KeyCard.Color> _colors;
 
     [Export]
     private AudioStreamPlayer2D _sfxPlayer;
@@ -35,7 +26,8 @@ public partial class Door : Area2D, IInteractable {
     [Export]
     private Texture2D _dimIconTexture;
 
-    private Doors.DoorId Id;
+    private List<KeyCard.Color> _colors;
+    private Doors.DoorId _id;
 
     private enum Animation {
         Open,
@@ -45,7 +37,11 @@ public partial class Door : Area2D, IInteractable {
     private const string Open = "open";
     private const string Close = "close";
 
-    public override void _Ready() {
+    public override void _Ready() { }
+
+    public void Init(Doors.DoorId id, List<KeyCard.Color> colors) {
+        _id = id;
+        _colors = colors;
         _DimColorIcons();
     }
 
@@ -67,8 +63,11 @@ public partial class Door : Area2D, IInteractable {
 
                 Callable.From(() => {
                     {
-                        Vector2 position = Doors.DoorPosition(Doors.GetDoorLocation(Id));
-                        _ = EventManager.MoveScene(_leadsTo, new SpawnOptions { Position = position });
+                        Doors.DoorId destinationDoorId = Doors.GetDestinationDoorId(_id);
+                        Vector2 position = Doors.DoorPosition(Doors.GetDoorLocation(destinationDoorId));
+                        SceneId leadsTo = Doors.GetDestinationScene(_id);
+                        GD.Print($"Entering scene {leadsTo}");
+                        _ = EventManager.MoveScene(leadsTo, new SpawnOptions { Position = position });
                     }
                 }).CallDeferred();
             };
