@@ -8,6 +8,10 @@ public partial class MainMenu : Node {
     }
 
     private void _StartGame() {
-        Callable.From(() => { _ = EventManager.MoveScene(SceneId.B, new Vector2(130, -30)); }).CallDeferred();
+        Callable.From(() => {
+            _ = EventManager.MoveScene(SceneId.B, new SpawnOptions {
+                Position = new Vector2(130, -30)
+            });
+        }).CallDeferred();
     }
 }

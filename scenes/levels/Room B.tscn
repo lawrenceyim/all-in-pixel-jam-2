@@ -1,17 +1,13 @@
 [gd_scene format=4 uid="uid://bqhfk8hfk4s4c"]
 
 [ext_resource type="TileSet" uid="uid://bb5f3v0phem3p" path="res://tileset/TileSet.tres" id="1_4b7gk"]
-[ext_resource type="PackedScene" uid="uid://bv7rxsv3cd3lc" path="res://scenes/game-objects/Player.tscn" id="1_xx43v"]
 [ext_resource type="PackedScene" uid="uid://bqokmsdp7olb2" path="res://scenes/game-objects/Door.tscn" id="2_e2b0q"]
 
 [node name="Node2D" type="Node2D" unique_id=1456782542]
 
-[node name="Player" parent="." unique_id=365774292 instance=ExtResource("1_xx43v")]
-position = Vector2(130, -30)
-
 [node name="Door A" parent="." unique_id=1782369364 instance=ExtResource("2_e2b0q")]
 position = Vector2(56, 68)
-_leadsTo = 1
+_spawnPosition = Vector2(55, 164)
 _colors = Array[int]([2])
 
 [node name="Door E" parent="." unique_id=1121511190 instance=ExtResource("2_e2b0q")]

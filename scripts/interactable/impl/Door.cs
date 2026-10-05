@@ -35,6 +35,8 @@ public partial class Door : Area2D, IInteractable {
     [Export]
     private Texture2D _dimIconTexture;
 
+    private Doors.DoorId Id;
+
     private enum Animation {
         Open,
         Close
@@ -65,7 +67,8 @@ public partial class Door : Area2D, IInteractable {
 
                 Callable.From(() => {
                     {
-                        _ = EventManager.MoveScene(_leadsTo, _spawnPosition);
+                        Vector2 position = Doors.DoorPosition(Doors.GetDoorLocation(Id));
+                        _ = EventManager.MoveScene(_leadsTo, new SpawnOptions { Position = position });
                     }
                 }).CallDeferred();
             };

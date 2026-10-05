@@ -87,7 +87,7 @@ public partial class Player : Node2D {
 
     #endregion
 
-    private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 100, JumpDuration = .5f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
+    private PlayerStats _stats = new() { MoveSpeed = 100, JumpSpeed = 150, JumpDuration = .5f, Gravity = 400, MaxFallSpeed = 300, NumberOfJumps = 1 };
     private Vector2 _velocity = Vector2.Zero;
     private double _jumpTimeLeft = 0;
     private IInteractable? _interactable;

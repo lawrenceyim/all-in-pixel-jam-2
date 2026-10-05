@@ -1,0 +1,26 @@
+[gd_scene format=4 uid="uid://ceqc5smonimoh"]
+
+[ext_resource type="TileSet" uid="uid://bb5f3v0phem3p" path="res://tileset/TileSet.tres" id="1_0yoo7"]
+[ext_resource type="PackedScene" uid="uid://bqokmsdp7olb2" path="res://scenes/game-objects/Door.tscn" id="2_umg8e"]
+
+[node name="Node2D" type="Node2D" unique_id=1171430241]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1076392066]
+tile_map_data = PackedByteArray("AAAAAAYAAAAAAAAAAAABAAYAAAAAAAAAAAACAAYAAAAAAAAAAAADAAYAAAAAAAAAAAAEAAYAAAAAAAAAAAAFAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAHAAYAAAAAAAAAAAAHAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAA=")
+tile_set = ExtResource("1_0yoo7")
+
+[node name="Door A" parent="." unique_id=1782369364 instance=ExtResource("2_umg8e")]
+position = Vector2(55, 164)
+_spawnPosition = Vector2(201, 164)
+_leadsTo = 1
+_colors = Array[int]([2])
+
+[node name="Door G" parent="." unique_id=1945496864 instance=ExtResource("2_umg8e")]
+position = Vector2(201, 164)
+_leadsTo = 3
+_colors = Array[int]([0])
+
+[node name="Door E" parent="." unique_id=1371496122 instance=ExtResource("2_umg8e")]
+position = Vector2(201, 68)
+_leadsTo = 3
+_colors = Array[int]([2])
