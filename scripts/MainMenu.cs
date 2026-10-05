@@ -6,13 +6,14 @@ public partial class MainMenu : Node {
         _StartGame();
     }
 
-    private void _StartGame() {
-        Callable.From(async () => {
+    private static void _StartGame() {
+        Callable.From(() => {
             string uid = Scenes.GetUid(SceneId.Tutorial);
             SceneTree tree = (SceneTree)Engine.GetMainLoop();
-            await tree.ToSignal(tree, SceneTree.SignalName.ProcessFrame);
-            tree.UnloadCurrentScene();
-            tree.ChangeSceneToFile(uid);
+            Error error = tree.ChangeSceneToFile(uid);
+            if (error != Error.Ok) {
+                GD.PushError($"Failed to load Tutorial: {error}");
+            }
         }).CallDeferred();
     }
 }
