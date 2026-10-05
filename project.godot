@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="all-in-pixel-jam-2"
+run/main_scene="uid://olatb18r5n3w"
 config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 config/icon="res://assets/sprites/icon.svg"
 

@@ -59,6 +59,9 @@ public partial class Player : Node2D {
     private ShapeCast2D _wallShapeCast;
 
     [Export]
+    private ShapeCast2D _ceilingShapeCast;
+
+    [Export]
     private AudioStreamPlayer2D _sfxPlayer;
 
     [Export]
@@ -239,18 +242,27 @@ public partial class Player : Node2D {
         if (!Mathf.IsZeroApprox(movement.X)) {
             _wallShapeCast.TargetPosition = new Vector2(movement.X, 0f);
             _wallShapeCast.ForceShapecastUpdate();
-
-            float safeFraction =
-                _wallShapeCast.GetClosestCollisionSafeFraction();
-
+            float safeFraction = _wallShapeCast.GetClosestCollisionSafeFraction();
             movement.X *= safeFraction;
-
             if (safeFraction < 1f) {
                 _velocity.X = 0f;
             }
         }
 
-        _playerSprite.GlobalPosition += movement;
+        // Apply horizontal movement before checking the ceiling.
+        _playerSprite.GlobalPosition += new Vector2(movement.X, 0f);
+
+        if (movement.Y < 0f) {
+            _ceilingShapeCast.TargetPosition = new Vector2(0f, movement.Y);
+            _ceilingShapeCast.ForceShapecastUpdate();
+            float safeFraction = _ceilingShapeCast.GetClosestCollisionSafeFraction();
+            movement.Y *= safeFraction;
+            if (safeFraction < 1f) {
+                _velocity.Y = 0f;
+            }
+        }
+
+        _playerSprite.GlobalPosition += new Vector2(0f, movement.Y);
     }
 
     private bool _IsGrounded() {

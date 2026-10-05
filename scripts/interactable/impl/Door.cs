@@ -23,6 +23,18 @@ public partial class Door : Area2D, IInteractable {
     [Export]
     private AudioStream _unlockingSfx;
 
+    [Export]
+    private Sprite2D _redIcon;
+
+    [Export]
+    private Sprite2D _greenIcon;
+
+    [Export]
+    private Sprite2D _blueIcon;
+
+    [Export]
+    private Texture2D _dimIconTexture;
+
     private enum Animation {
         Open,
         Close
@@ -30,6 +42,10 @@ public partial class Door : Area2D, IInteractable {
 
     private const string Open = "open";
     private const string Close = "close";
+
+    public override void _Ready() {
+        _DimColorIcons();
+    }
 
     public void Interact(InteractionContext interactionContext) {
         if (interactionContext is not PlayerInteractionContext playerContext) {
@@ -69,6 +85,20 @@ public partial class Door : Area2D, IInteractable {
         // PlayerData.DoorsUnlocked.Add(_color);
         // _sfxPlayer.Stream = _unlockingSfx;
         // _sfxPlayer.Play();
+    }
+
+    private void _DimColorIcons() {
+        if (!_colors.Contains(KeyCard.Color.Red)) {
+            _redIcon.Texture = _dimIconTexture;
+        }
+
+        if (!_colors.Contains(KeyCard.Color.Green)) {
+            _greenIcon.Texture = _dimIconTexture;
+        }
+
+        if (!_colors.Contains(KeyCard.Color.Blue)) {
+            _blueIcon.Texture = _dimIconTexture;
+        }
     }
 
     private bool _HaveAllCards() {

@@ -149,13 +149,14 @@ size = Vector2(30, 1)
 size = Vector2(30, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dd5f2"]
-size = Vector2(35, 30)
+size = Vector2(35, 35)
 
-[node name="Player" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_playerSprite", "_groundedShapeCast", "_wallShapeCast", "_sfxPlayer", "_interactionHitbox", "_healthDisplay", "_redKeyCard", "_greenKeyCard", "_blueKeyCard")]
+[node name="Player" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_playerSprite", "_groundedShapeCast", "_wallShapeCast", "_ceilingShapeCast", "_sfxPlayer", "_interactionHitbox", "_healthDisplay", "_redKeyCard", "_greenKeyCard", "_blueKeyCard")]
 script = ExtResource("1_k0rq2")
 _playerSprite = NodePath("AnimatedSprite2D")
 _groundedShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D Grounded")
 _wallShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D Wall")
+_ceilingShapeCast = NodePath("AnimatedSprite2D/ShapeCast2D Ceiling")
 _sfxPlayer = NodePath("AnimatedSprite2D/AudioStreamPlayer2D")
 _swingSfx = ExtResource("2_f2kyb")
 _jumpSfx = ExtResource("3_m4re5")
@@ -174,7 +175,14 @@ autoplay = "idle"
 [node name="ShapeCast2D Grounded" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=1958611204]
 position = Vector2(0, 25)
 shape = SubResource("RectangleShape2D_4frs6")
-target_position = Vector2(0, 1)
+target_position = Vector2(0, 2)
+collision_mask = 2
+collide_with_areas = true
+
+[node name="ShapeCast2D Ceiling" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=1367543166]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_4frs6")
+target_position = Vector2(0, -2)
 collision_mask = 2
 collide_with_areas = true
 
@@ -188,6 +196,7 @@ position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_jamob")
 
 [node name="ShapeCast2D Wall" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=2115537739]
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_dd5f2")
 target_position = Vector2(0, 0)
 collision_mask = 2

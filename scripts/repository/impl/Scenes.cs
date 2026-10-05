@@ -4,8 +4,8 @@ namespace AddOns.Repository;
 
 public class Scenes : IRepository<SceneId> {
     private static readonly Dictionary<SceneId, string> _sceneUid = new() {
-        { SceneId.MainLevel, "uid://bqhfk8hfk4s4c" },
-        { SceneId.LevelOne, "uid://d2s15qnsdfpl" }
+        { SceneId.A, "uid://d2s15qnsdfpl" },
+        { SceneId.B, "uid://bqhfk8hfk4s4c" },
     };
 
     public static string ValidateUids() => RepositoryValidator.Validate(_sceneUid, nameof(Scenes));
@@ -16,6 +16,19 @@ public class Scenes : IRepository<SceneId> {
 }
 
 public enum SceneId {
-    MainLevel,
-    LevelOne,
+    A,
+    B,
+    C,
+    E,
+    F,
+    G,
+    H,
+    I,
+    J,
+    K,
+    L,
+    M,
+    N,
+    O,
+    Goal
 }
