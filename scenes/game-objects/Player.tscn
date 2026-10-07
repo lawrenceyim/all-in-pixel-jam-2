@@ -149,7 +149,7 @@ size = Vector2(30, 1)
 size = Vector2(30, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dd5f2"]
-size = Vector2(35, 35)
+size = Vector2(35, 41)
 
 [node name="Player" type="Node2D" unique_id=365774292 node_paths=PackedStringArray("_playerSprite", "_groundedShapeCast", "_wallShapeCast", "_ceilingShapeCast", "_sfxPlayer", "_interactionHitbox", "_healthDisplay", "_redKeyCard", "_greenKeyCard", "_blueKeyCard")]
 script = ExtResource("1_k0rq2")
@@ -196,7 +196,7 @@ position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_jamob")
 
 [node name="ShapeCast2D Wall" type="ShapeCast2D" parent="AnimatedSprite2D" unique_id=2115537739]
-position = Vector2(0, 1)
+position = Vector2(0, 3.5)
 shape = SubResource("RectangleShape2D_dd5f2")
 target_position = Vector2(0, 0)
 collision_mask = 2
