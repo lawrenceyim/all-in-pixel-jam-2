@@ -15,6 +15,9 @@ public partial class Door : Area2D, IInteractable {
     private AudioStream _unlockingSfx;
 
     [Export]
+    private AudioStream _openingSfx;
+
+    [Export]
     private Sprite2D _redIcon;
 
     [Export]
@@ -56,11 +59,14 @@ public partial class Door : Area2D, IInteractable {
         if (_HaveAllCards()) {
             playerContext.Player.DoorEntered += async () => {
                 Task animationTask = _WaitForSignal(_sprite, AnimatedSprite2D.SignalName.AnimationFinished);
-                // Task _ = _WaitForSignal() // door SFX
+                Task audioTask = _WaitForSignal(_sfxPlayer, AudioStreamPlayer.SignalName.Finished);
                 _PlayAnimation(Animation.Open);
+                _sfxPlayer.Stream = _openingSfx;
+                _sfxPlayer.Play();
 
                 await Task.WhenAll(
-                    animationTask
+                    animationTask,
+                    audioTask
                 );
 
                 Callable.From(() => {
