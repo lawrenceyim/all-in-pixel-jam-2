@@ -1,6 +1,101 @@
 [gd_scene format=3 uid="uid://olatb18r5n3w"]
 
 [ext_resource type="Script" uid="uid://cxxhrgyuw7r7o" path="res://scripts/MainMenu.cs" id="1_4xtjk"]
+[ext_resource type="Texture2D" uid="uid://1hg0ivohtq1c" path="res://assets/sprites/BlackScreen256.png" id="2_4g3rc"]
+[ext_resource type="FontFile" uid="uid://de78fxh1qtmuv" path="res://assets/font/arcadeclassic/ARCADECLASSIC.TTF" id="3_agb1x"]
+[ext_resource type="Texture2D" uid="uid://keoeve6ldvjr" path="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png" id="3_hyrlu"]
 
-[node name="Node2D" type="Node2D" unique_id=1899646764]
+[sub_resource type="LabelSettings" id="LabelSettings_pqg00"]
+font = ExtResource("3_agb1x")
+font_size = 32
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x2mxt"]
+atlas = ExtResource("3_hyrlu")
+region = Rect2(47, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdcyf"]
+atlas = ExtResource("3_hyrlu")
+region = Rect2(94, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_paq7i"]
+atlas = ExtResource("3_hyrlu")
+region = Rect2(141, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5hqa"]
+atlas = ExtResource("3_hyrlu")
+region = Rect2(188, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iauvc"]
+atlas = ExtResource("3_hyrlu")
+region = Rect2(235, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdxty"]
+atlas = ExtResource("3_hyrlu")
+region = Rect2(282, 0, 47, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_agb1x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2mxt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdcyf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_paq7i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u5hqa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iauvc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdxty")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 7.0
+}]
+
+[node name="Node2D" type="Node2D" unique_id=1899646764 node_paths=PackedStringArray("_startButton", "_exitButton")]
 script = ExtResource("1_4xtjk")
+_startButton = NodePath("Start button")
+_exitButton = NodePath("Quit Button")
+
+[node name="BlackScreen256" type="Sprite2D" parent="." unique_id=49635889]
+texture = ExtResource("2_4g3rc")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1725181000]
+
+[node name="Label" type="Label" parent="." unique_id=1898695005]
+offset_left = -128.0
+offset_top = -112.0
+offset_right = 127.0
+offset_bottom = -36.0
+text = "STARA'S ESCAPE"
+label_settings = SubResource("LabelSettings_pqg00")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1235305531]
+sprite_frames = SubResource("SpriteFrames_agb1x")
+autoplay = "default"
+
+[node name="Start button" type="Button" parent="." unique_id=1106237349]
+offset_left = -31.0
+offset_top = 27.66
+offset_right = 31.0
+offset_bottom = 52.66
+theme_override_fonts/font = ExtResource("3_agb1x")
+text = "ESCAPE"
+
+[node name="Quit Button" type="Button" parent="." unique_id=1513376226]
+offset_left = -32.0
+offset_top = 65.0
+offset_right = 30.0
+offset_bottom = 90.0
+theme_override_fonts/font = ExtResource("3_agb1x")
+text = "QUIT
+"

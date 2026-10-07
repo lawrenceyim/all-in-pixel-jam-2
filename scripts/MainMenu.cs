@@ -2,8 +2,17 @@ using AddOns.Repository;
 using Godot;
 
 public partial class MainMenu : Node {
+    [Export]
+    private Button _startButton;
+
+    [Export]
+    private Button _exitButton;
+
     public override void _Ready() {
-        _StartGame();
+        _startButton.Pressed += _StartGame;
+        _exitButton.Pressed += () => { GetTree().Quit(); };
+        _ = GlobalAudioPlayer.PlaySong();
+        KeyBind.Initialize();
     }
 
     private static void _StartGame() {

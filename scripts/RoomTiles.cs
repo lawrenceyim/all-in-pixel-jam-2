@@ -100,6 +100,12 @@ public static class RoomTiles {
             tiles.Remove(new Vector2(4, 0));
             tiles.Add(new Vector2(2, -1), TileId.Placeholder);
             tiles.Add(new Vector2(5, -1), TileId.Placeholder);
+            tiles.Add(new Vector2(2, -2), TileId.Placeholder);
+            tiles.Add(new Vector2(5, -2), TileId.Placeholder);
+            tiles.Add(new Vector2(2, -3), TileId.Placeholder);
+            tiles.Add(new Vector2(5, -3), TileId.Placeholder);
+            tiles.Add(new Vector2(2, -4), TileId.Placeholder);
+            tiles.Add(new Vector2(5, -4), TileId.Placeholder);
         }
 
         return tiles;
