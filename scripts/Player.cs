@@ -238,26 +238,28 @@ public partial class Player : Node2D {
 
     private void _Move(double delta) {
         Vector2 movement = _velocity * (float)delta;
-
         if (!Mathf.IsZeroApprox(movement.X)) {
-            _wallShapeCast.TargetPosition = new Vector2(movement.X, 0f);
-            _wallShapeCast.ForceShapecastUpdate();
-            float safeFraction = _wallShapeCast.GetClosestCollisionSafeFraction();
-            movement.X *= safeFraction;
-            if (safeFraction < 1f) {
+            float fraction = _GetSafeFraction(
+                _wallShapeCast,
+                new Vector2(movement.X, 0f)
+            );
+            movement.X *= fraction;
+            if (fraction < 1f) {
                 _velocity.X = 0f;
             }
         }
 
-        // Apply horizontal movement before checking the ceiling.
         _playerSprite.GlobalPosition += new Vector2(movement.X, 0f);
-
-        if (movement.Y < 0f) {
-            _ceilingShapeCast.TargetPosition = new Vector2(0f, movement.Y);
-            _ceilingShapeCast.ForceShapecastUpdate();
-            float safeFraction = _ceilingShapeCast.GetClosestCollisionSafeFraction();
-            movement.Y *= safeFraction;
-            if (safeFraction < 1f) {
+        if (!Mathf.IsZeroApprox(movement.Y)) {
+            ShapeCast2D verticalCast = movement.Y < 0f
+                ? _ceilingShapeCast
+                : _groundedShapeCast;
+            float fraction = _GetSafeFraction(
+                verticalCast,
+                new Vector2(0f, movement.Y)
+            );
+            movement.Y *= fraction;
+            if (fraction < 1f) {
                 _velocity.Y = 0f;
             }
         }
@@ -265,7 +267,24 @@ public partial class Player : Node2D {
         _playerSprite.GlobalPosition += new Vector2(0f, movement.Y);
     }
 
+    private static float _GetSafeFraction(
+        ShapeCast2D shapeCast,
+        Vector2 worldMovement
+    ) {
+        // TargetPosition is local to the ShapeCast2D.
+        // Convert because movement is applied through GlobalPosition.
+        shapeCast.TargetPosition = shapeCast.ToLocal(shapeCast.GlobalPosition + worldMovement);
+        shapeCast.ForceShapecastUpdate();
+        return shapeCast.GetClosestCollisionSafeFraction();
+    }
+
     private bool _IsGrounded() {
+        if (_velocity.Y < 0f) {
+            return false;
+        }
+
+        _groundedShapeCast.TargetPosition = _groundedShapeCast.ToLocal(_groundedShapeCast.GlobalPosition + Vector2.Down);
+        _groundedShapeCast.ForceShapecastUpdate();
         return _groundedShapeCast.IsColliding();
     }
 
@@ -387,25 +406,28 @@ public partial class Player : Node2D {
         }
 
         public void Process(double delta) {
-            if (player._IsGrounded()) {
-                player._ChangeState(State.Grounded);
+            player.HorizontalMovementInput();
+            player._JumpInput();
+
+            if (player._state != this) {
                 return;
             }
 
-            player._Gravity(delta);
-            player.HorizontalMovementInput();
-            player._JumpInput();
             player._InteractionInput();
             if (player._state != this) {
                 return;
             }
 
             player._FlipPlayerSprite();
-            // TODO: Set animation
         }
 
         public void PhysicsProcess(double delta) {
+            player._Gravity(delta);
             player._Move(delta);
+
+            if (player._IsGrounded()) {
+                player._ChangeState(State.Grounded);
+            }
         }
     }
 
