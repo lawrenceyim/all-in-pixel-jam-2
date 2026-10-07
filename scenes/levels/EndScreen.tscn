@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://drlhphegoab3g" path="res://assets/sprites/Black Screen.png" id="1_p8km8"]
 [ext_resource type="Texture2D" uid="uid://keoeve6ldvjr" path="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png" id="2_ymseo"]
+[ext_resource type="FontFile" uid="uid://de78fxh1qtmuv" path="res://assets/font/arcadeclassic/ARCADECLASSIC.TTF" id="3_ymseo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x2mxt"]
 atlas = ExtResource("2_ymseo")
@@ -53,6 +54,9 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="LabelSettings" id="LabelSettings_agb1x"]
+font = ExtResource("3_ymseo")
+
 [node name="Node2D" type="Node2D" unique_id=141767792]
 
 [node name="BlackScreen" type="Sprite2D" parent="." unique_id=996335083]
@@ -71,5 +75,6 @@ offset_top = -65.0
 offset_right = 35.0
 offset_bottom = -42.0
 text = "ESCAPED"
+label_settings = SubResource("LabelSettings_agb1x")
 horizontal_alignment = 1
 vertical_alignment = 1
