@@ -1,11 +1,14 @@
+using System.Threading.Tasks;
 using Godot;
 
 public class GlobalAudioPlayer {
     private static string _songUid = "uid://c4ww7tyor5p2f";
     private static AudioStreamPlayer _songPlayer;
+    private static Task<AudioStreamPlayer> _songPlayerTask;
 
-    public static void PlaySong() {
-        _songPlayer ??= _AddAudioStreamPlayer();
+    public static async Task PlaySong() {
+        _songPlayerTask ??= _AddAudioStreamPlayer();
+        _songPlayer = await _songPlayerTask;
         if (_songPlayer.IsPlaying()) {
             return;
         }
@@ -16,9 +19,15 @@ public class GlobalAudioPlayer {
         _songPlayer.Play();
     }
 
-    private static AudioStreamPlayer _AddAudioStreamPlayer() {
-        AudioStreamPlayer streamPlayer = new AudioStreamPlayer();
+    private static async Task<AudioStreamPlayer> _AddAudioStreamPlayer() {
         SceneTree tree = (SceneTree)Engine.GetMainLoop();
+        Window root = tree.Root;
+
+        if (!root.IsNodeReady()) {
+            await root.ToSignal(root, Node.SignalName.Ready);
+        }
+
+        AudioStreamPlayer streamPlayer = new AudioStreamPlayer();
         tree.Root.AddChild(streamPlayer);
         return streamPlayer;
     }

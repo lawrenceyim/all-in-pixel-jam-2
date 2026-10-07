@@ -97,7 +97,7 @@ public partial class Player : Node2D {
     private IPlayerState _state;
 
     public override void _Ready() {
-        GlobalAudioPlayer.PlaySong();
+        _ = GlobalAudioPlayer.PlaySong();
         KeyBind.Initialize(); // TODO: Refactor and move elsewhere
         _interactionHitbox.AreaEntered += _SetInteractable;
         _interactionHitbox.AreaExited += _ClearInteractable;

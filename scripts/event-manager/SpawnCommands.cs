@@ -6,7 +6,7 @@ public static class SpawnCommands {
     private static readonly Dictionary<SceneId, List<ISceneCommand>> _commands = new() {
         {
             SceneId.B, [
-                new SpawnKeyCard(new Vector2(130, 164), KeyCard.Color.Red, () => !PlayerData.CardsFound.Contains(KeyCard.Color.Red))
+                new SpawnKeyCard(new Vector2(130, 180), KeyCard.Color.Red, () => !PlayerData.CardsFound.Contains(KeyCard.Color.Red))
             ]
         }, {
             SceneId.F, [
