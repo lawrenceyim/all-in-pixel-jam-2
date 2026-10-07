@@ -398,7 +398,6 @@ public partial class Player : Node2D {
 
         public void Enter() {
             player._SetAnimation(Animation.Fall);
-            // TODO: Set falling animation
         }
 
         public void Exit() {
@@ -409,11 +408,6 @@ public partial class Player : Node2D {
             player.HorizontalMovementInput();
             player._JumpInput();
 
-            if (player._state != this) {
-                return;
-            }
-
-            player._InteractionInput();
             if (player._state != this) {
                 return;
             }
@@ -449,8 +443,6 @@ public partial class Player : Node2D {
             player.HorizontalMovementInput();
             player._JumpInput();
             player._FlipPlayerSprite();
-            // TODO: Set animation
-            player._InteractionInput();
         }
 
         public void PhysicsProcess(double delta) {
