@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://chh3nh5k7euk8"]
+
+[ext_resource type="Texture2D" uid="uid://drlhphegoab3g" path="res://assets/sprites/Black Screen.png" id="1_p8km8"]
+[ext_resource type="Texture2D" uid="uid://keoeve6ldvjr" path="res://assets/sprites/player/Hero1_WalkFrames_Aesprite000002-Sheet.png" id="2_ymseo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x2mxt"]
+atlas = ExtResource("2_ymseo")
+region = Rect2(47, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdcyf"]
+atlas = ExtResource("2_ymseo")
+region = Rect2(94, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_paq7i"]
+atlas = ExtResource("2_ymseo")
+region = Rect2(141, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5hqa"]
+atlas = ExtResource("2_ymseo")
+region = Rect2(188, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iauvc"]
+atlas = ExtResource("2_ymseo")
+region = Rect2(235, 0, 47, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdxty"]
+atlas = ExtResource("2_ymseo")
+region = Rect2(282, 0, 47, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4frs6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2mxt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdcyf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_paq7i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u5hqa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iauvc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdxty")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 7.0
+}]
+
+[node name="Node2D" type="Node2D" unique_id=141767792]
+
+[node name="BlackScreen" type="Sprite2D" parent="." unique_id=996335083]
+texture = ExtResource("1_p8km8")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=927733525]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1768051115]
+sprite_frames = SubResource("SpriteFrames_4frs6")
+autoplay = "default"
+frame_progress = 0.6880376
+
+[node name="Label" type="Label" parent="." unique_id=181127328]
+offset_left = -35.0
+offset_top = -65.0
+offset_right = 35.0
+offset_bottom = -42.0
+text = "ESCAPED"
+horizontal_alignment = 1
+vertical_alignment = 1

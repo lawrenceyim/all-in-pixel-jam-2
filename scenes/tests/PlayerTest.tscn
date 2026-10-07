@@ -1,11 +1,12 @@
-[gd_scene format=3 uid="uid://c3g84yybcwmkc"]
+[gd_scene format=4 uid="uid://c3g84yybcwmkc"]
 
-[ext_resource type="Texture2D" uid="uid://dmt0k34pglr1a" path="res://assets/sprites/icon.svg" id="1_n7faw"]
 [ext_resource type="Script" uid="uid://cfrtv28xusrn1" path="res://scripts/test/PlayerTest.cs" id="1_rru0f"]
 [ext_resource type="PackedScene" uid="uid://bv7rxsv3cd3lc" path="res://scenes/game-objects/Player.tscn" id="2_rru0f"]
+[ext_resource type="TileSet" uid="uid://bb5f3v0phem3p" path="res://tileset/TileSet.tres" id="3_rru0f"]
+[ext_resource type="PackedScene" uid="uid://bqokmsdp7olb2" path="res://scenes/game-objects/Door.tscn" id="4_8w4lf"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8w4lf"]
-size = Vector2(128, 128)
+[sub_resource type="LabelSettings" id="LabelSettings_8w4lf"]
+font_size = 8
 
 [node name="Node2D" type="Node2D" unique_id=886149995 node_paths=PackedStringArray("_player", "_damagePlayer", "_healPlayer", "_killPlayer", "_enterDoor")]
 script = ExtResource("1_rru0f")
@@ -14,15 +15,6 @@ _damagePlayer = NodePath("CanvasLayer/Damage Button")
 _healPlayer = NodePath("CanvasLayer/Heal Button")
 _killPlayer = NodePath("CanvasLayer/Kill Button")
 _enterDoor = NodePath("CanvasLayer/Enter Door Button")
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1851162328]
-position = Vector2(116, 207)
-texture = ExtResource("1_n7faw")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D" unique_id=1519768588]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D" unique_id=2078336662]
-shape = SubResource("RectangleShape2D_8w4lf")
 
 [node name="Player" parent="." unique_id=365774292 instance=ExtResource("2_rru0f")]
 position = Vector2(116, 102)
@@ -61,3 +53,21 @@ offset_right = 253.0
 offset_bottom = 101.0
 theme_override_font_sizes/font_size = 8
 text = "Enter Door"
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1982288896]
+tile_map_data = PackedByteArray("AAAAAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAADAAYAAAAAAAAAAAACAAYAAAAAAAAAAAABAAYAAAAAAAAAAAAHAAYAAAAAAAAAAAAHAAUAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAADAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAYAAAAAAAAAAAAFAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAA=")
+tile_set = ExtResource("3_rru0f")
+
+[node name="Label" type="Label" parent="TileMapLayer" unique_id=2065083029]
+offset_left = 35.0
+offset_top = 34.0
+offset_right = 75.0
+offset_bottom = 57.0
+text = "A and D to move
+Space to jump
+E to interact"
+label_settings = SubResource("LabelSettings_8w4lf")
+
+[node name="Door" parent="." unique_id=1782369364 instance=ExtResource("4_8w4lf")]
+position = Vector2(63, 164)
+_id = 42

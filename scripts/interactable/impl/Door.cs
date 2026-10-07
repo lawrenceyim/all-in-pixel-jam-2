@@ -26,8 +26,10 @@ public partial class Door : Area2D, IInteractable {
     [Export]
     private Texture2D _dimIconTexture;
 
-    private List<KeyCard.Color> _colors;
+    [Export]
     private Doors.DoorId _id;
+
+    private List<KeyCard.Color> _colors = [];
 
     private enum Animation {
         Open,
@@ -63,6 +65,11 @@ public partial class Door : Area2D, IInteractable {
 
                 Callable.From(() => {
                     {
+                        if (_id == Doors.DoorId.Goal) {
+                            _ = EventManager.ChangeToEnd();
+                            return;
+                        }
+
                         Doors.DoorId destinationDoorId = Doors.GetDestinationDoorId(_id);
                         Vector2 position = Doors.DoorPosition(Doors.GetDoorLocation(destinationDoorId));
                         SceneId leadsTo = Doors.GetDestinationScene(_id);

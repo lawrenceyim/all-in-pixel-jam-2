@@ -31,4 +31,11 @@ public static class EventManager {
             command.Execute(scene);
         }
     }
+
+    public static async Task ChangeToEnd() {
+        SceneTree tree = (SceneTree)Engine.GetMainLoop();
+        await tree.ToSignal(tree, SceneTree.SignalName.ProcessFrame);
+        tree.UnloadCurrentScene();
+        tree.ChangeSceneToFile(Scenes.GetUid(SceneId.End));
+    }
 }
