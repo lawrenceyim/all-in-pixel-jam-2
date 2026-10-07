@@ -14,6 +14,12 @@ public partial class KeyCard : Area2D, IInteractable {
     [Export]
     private Sprite2D _sprite;
 
+    [Export]
+    private AudioStreamPlayer _sfxPlayer;
+
+    [Export]
+    private AudioStream _keyCardFoundSfx;
+
     public void SetColor(Color color) {
         _color = color;
         string uid = color switch {
@@ -25,12 +31,11 @@ public partial class KeyCard : Area2D, IInteractable {
     }
 
     public void Interact(InteractionContext context) {
-        GD.Print($"Keycard {_color} obtained");
-        // Needs to fly toward position
+        _sfxPlayer.Stream = _keyCardFoundSfx;
+        _sfxPlayer.Play();
         PlayerInteractionContext playerContext = (PlayerInteractionContext)context;
         _ = playerContext.Player.FoundKey(this, _color);
         PlayerData.CardsFound.Add(_color);
-        // QueueFree();
     }
 
     public Sprite2D GetSprite() {

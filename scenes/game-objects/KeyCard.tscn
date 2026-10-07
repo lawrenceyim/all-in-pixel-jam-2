@@ -1,17 +1,23 @@
 [gd_scene format=3 uid="uid://bbevog6ngdbxw"]
 
 [ext_resource type="Script" uid="uid://c62hndsbq1wvr" path="res://scripts/interactable/impl/KeyCard.cs" id="1_ef2u8"]
+[ext_resource type="AudioStream" uid="uid://b8xvodjc8vbrw" path="res://assets/sfx/keycard found.mp3" id="2_8g4xb"]
 [ext_resource type="Texture2D" uid="uid://3y82wxixdukp" path="res://assets/sprites/game-objects/key-cards/BlueKeyCard.png" id="2_ef2u8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4frs6"]
 size = Vector2(15, 18)
 
-[node name="KeyCard" type="Area2D" unique_id=5749783 node_paths=PackedStringArray("_sprite")]
+[node name="KeyCard" type="Area2D" unique_id=5749783 node_paths=PackedStringArray("_sprite", "_sfxPlayer")]
 script = ExtResource("1_ef2u8")
 _sprite = NodePath("Sprite2D")
+_sfxPlayer = NodePath("AudioStreamPlayer")
+_keyCardFoundSfx = ExtResource("2_8g4xb")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1727538541]
 texture = ExtResource("2_ef2u8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1180177033]
 shape = SubResource("RectangleShape2D_4frs6")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=508955098]
+volume_db = -15.0
