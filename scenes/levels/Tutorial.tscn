@@ -3,8 +3,10 @@
 [ext_resource type="Script" uid="uid://1u543aaha1kj" path="res://scripts/TutorialRoom.cs" id="1_dlxjb"]
 [ext_resource type="TileSet" uid="uid://bb5f3v0phem3p" path="res://tileset/TileSet.tres" id="1_v63nh"]
 [ext_resource type="PackedScene" uid="uid://bv7rxsv3cd3lc" path="res://scenes/game-objects/Player.tscn" id="2_8omqi"]
+[ext_resource type="FontFile" uid="uid://de78fxh1qtmuv" path="res://assets/font/arcadeclassic/ARCADECLASSIC.TTF" id="3_af4br"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4frs6"]
+font = ExtResource("3_af4br")
 font_size = 8
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4frs6"]
@@ -23,9 +25,9 @@ offset_left = 35.0
 offset_top = 34.0
 offset_right = 75.0
 offset_bottom = 57.0
-text = "A and D to move
-Space to jump
-E to interact"
+text = "A  and  D  to  move
+Space    to  jump
+E  to  interact"
 label_settings = SubResource("LabelSettings_4frs6")
 
 [node name="Player" parent="." unique_id=365774292 instance=ExtResource("2_8omqi")]
