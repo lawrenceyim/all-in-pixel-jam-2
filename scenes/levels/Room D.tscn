@@ -11,16 +11,9 @@ tile_set = ExtResource("1_0yoo7")
 
 [node name="Door A" parent="." unique_id=1782369364 instance=ExtResource("2_umg8e")]
 position = Vector2(55, 164)
-_spawnPosition = Vector2(201, 164)
-_leadsTo = 1
-_colors = Array[int]([2])
 
 [node name="Door G" parent="." unique_id=1945496864 instance=ExtResource("2_umg8e")]
 position = Vector2(201, 164)
-_leadsTo = 3
-_colors = Array[int]([0])
 
 [node name="Door E" parent="." unique_id=1371496122 instance=ExtResource("2_umg8e")]
 position = Vector2(201, 68)
-_leadsTo = 3
-_colors = Array[int]([2])
