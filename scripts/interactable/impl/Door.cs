@@ -15,6 +15,9 @@ public partial class Door : Area2D, IInteractable {
     private AudioStream _unlockingSfx;
 
     [Export]
+    private AudioStream _rejectedSfx;
+
+    [Export]
     private AudioStream _openingSfx;
 
     [Export]
@@ -90,16 +93,8 @@ public partial class Door : Area2D, IInteractable {
             return;
         }
 
-        // TODO: incorrect SFX
-
-        // if (!PlayerData.CardsFound.Contains(_color)) {
-        //     return;
-        // }
-        //
-        // // unlocking sfx
-        // PlayerData.DoorsUnlocked.Add(_color);
-        // _sfxPlayer.Stream = _unlockingSfx;
-        // _sfxPlayer.Play();
+        _sfxPlayer.Stream = _rejectedSfx;
+        _sfxPlayer.Play();
     }
 
     private void _DimColorIcons() {
