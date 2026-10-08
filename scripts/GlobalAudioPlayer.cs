@@ -9,28 +9,13 @@ public class GlobalAudioPlayer {
         Ending
     }
 
-    private static string _songUid = "uid://c4ww7tyor5p2f";
-    private static string _titleSongUid = "uid://b4ca12l4wkmtj";
-    private static string _gameplaySongUid = "uid://cavcqkub3ffvw";
-    private static string _endingSongUid = "uid://cox3e7c3nvjcm";
+    private const string TitleSongUid = "uid://b4ca12l4wkmtj";
+    private const string GameplaySongUid = "uid://cavcqkub3ffvw";
+    private const string EndingSongUid = "uid://cox3e7c3nvjcm";
     private static AudioStreamPlayer _songPlayer;
     private static AudioPlayer _songPlayerDto;
     private static Task<AudioStreamPlayer> _songPlayerTask;
     private static SongId _songId = SongId.None;
-
-    public static async Task PlaySong() {
-        _songPlayerTask ??= _AddAudioStreamPlayer();
-        _songPlayer = await _songPlayerTask;
-        _songPlayerDto = new AudioPlayerDto(_songPlayer);
-        AudioManager.AddAudioStreamPlayer(_songPlayerDto, AudioManager.AudioType.Music);
-        if (_songPlayer.IsPlaying()) {
-            return;
-        }
-
-        // Loop enabled in the stream itself in editor
-        _songPlayer.Stream = GD.Load<AudioStream>(_songUid);
-        _songPlayer.Play();
-    }
 
     public static async Task PlaySong(SongId id) {
         _songPlayerTask ??= _AddAudioStreamPlayer();
@@ -42,10 +27,11 @@ public class GlobalAudioPlayer {
             return;
         }
 
+        _songId = id;
         string uid = id switch {
-            SongId.Title => _titleSongUid,
-            SongId.Gameplay => _gameplaySongUid,
-            SongId.Ending => _endingSongUid,
+            SongId.Title => TitleSongUid,
+            SongId.Gameplay => GameplaySongUid,
+            SongId.Ending => EndingSongUid,
             _ => "",
         };
 
