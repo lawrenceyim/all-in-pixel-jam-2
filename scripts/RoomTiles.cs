@@ -4,7 +4,9 @@ using AddOns.Repository;
 using Godot;
 
 public enum TileId {
-    Placeholder
+    Placeholder,
+    Tile3,
+    Tile4
 }
 
 public static class RoomTiles {
@@ -22,7 +24,6 @@ public static class RoomTiles {
         Start
     }
 
-    // Four shared tile layouts.
     private static readonly Dictionary<Layout, Dictionary<Vector2, TileId>> _layouts = new() {
         [Layout.None] = CreateLayout(false, false),
         [Layout.Left] = CreateLayout(true, false),
@@ -31,33 +32,35 @@ public static class RoomTiles {
         [Layout.Start] = CreateLayout(true, true, true)
     };
 
-    // Assumes your existing scene enum uses A, B, C, etc.
-    private static readonly Dictionary<SceneId, Layout> _roomLayouts = new() {
-        [SceneId.A] = Layout.None,
-        [SceneId.B] = Layout.Start,
-        [SceneId.C] = Layout.Left,
-        [SceneId.D] = Layout.Right,
-        [SceneId.E] = Layout.Both,
-        [SceneId.F] = Layout.Right,
-        [SceneId.G] = Layout.Both,
-        [SceneId.H] = Layout.Both,
-        [SceneId.I] = Layout.None,
-        [SceneId.J] = Layout.Both,
-        [SceneId.K] = Layout.Both,
-        [SceneId.L] = Layout.Left,
-        [SceneId.M] = Layout.Left,
-        [SceneId.N] = Layout.Left,
-        [SceneId.O] = Layout.None
+    private static readonly Dictionary<SceneId, (Layout Layout, TileId Tile)> _roomLayouts = new() {
+        [SceneId.A] = (Layout.None, TileId.Tile3),
+        [SceneId.B] = (Layout.Start, TileId.Tile4),
+        [SceneId.C] = (Layout.Left, TileId.Tile3),
+        [SceneId.D] = (Layout.Right, TileId.Tile4),
+        [SceneId.E] = (Layout.Both, TileId.Tile3),
+        [SceneId.F] = (Layout.Right, TileId.Tile4),
+        [SceneId.G] = (Layout.Both, TileId.Tile3),
+        [SceneId.H] = (Layout.Both, TileId.Tile4),
+        [SceneId.I] = (Layout.None, TileId.Tile3),
+        [SceneId.J] = (Layout.Both, TileId.Tile4),
+        [SceneId.K] = (Layout.Both, TileId.Tile3),
+        [SceneId.L] = (Layout.Left, TileId.Tile4),
+        [SceneId.M] = (Layout.Left, TileId.Tile3),
+        [SceneId.N] = (Layout.Left, TileId.Tile4),
+        [SceneId.O] = (Layout.None, TileId.Tile3)
     };
 
     public static Dictionary<Vector2, TileId> GetTiles(SceneId sceneId) {
-        if (!_roomLayouts.TryGetValue(sceneId, out Layout layout)) {
-            throw new ArgumentOutOfRangeException(
-                nameof(sceneId), sceneId, "No tile layout for this room.");
+        if (!_roomLayouts.TryGetValue(sceneId, out (Layout Layout, TileId Tile) room)) {
+            throw new ArgumentOutOfRangeException(nameof(sceneId), sceneId, "No tile layout for this room.");
         }
 
-        // Return a copy so edits only affect this room instance.
-        return new Dictionary<Vector2, TileId>(_layouts[layout]);
+        Dictionary<Vector2, TileId> tiles = new();
+        foreach (Vector2 position in _layouts[room.Layout].Keys) {
+            tiles[position] = room.Tile;
+        }
+
+        return tiles;
     }
 
     private static Dictionary<Vector2, TileId> CreateLayout(
@@ -95,6 +98,7 @@ public static class RoomTiles {
             tiles[new Vector2(6, platformY)] = TileId.Placeholder;
         }
 
+        // Create chimney to prevent player from jumping out of bounds when spawned out of view
         if (openCeiling) {
             tiles.Remove(new Vector2(3, 0));
             tiles.Remove(new Vector2(4, 0));
@@ -113,39 +117,82 @@ public static class RoomTiles {
 }
 
 public static class TileMapFactory {
-    private const int PlaceholderSourceId = 0;
-    private static readonly Vector2I _placeholderAtlasCoords = new(0, 0);
-
     public static TileMapLayer CreateTileMap(
         Dictionary<Vector2, TileId> tiles
     ) {
         TileSet tileSet = GD.Load<TileSet>("uid://bb5f3v0phem3p");
-
-        ArgumentNullException.ThrowIfNull(tiles);
-        ArgumentNullException.ThrowIfNull(tileSet);
-
         TileMapLayer tileMap = new() {
             Name = "RoomTiles",
             TileSet = tileSet
         };
 
-        foreach ((Vector2 position, TileId value) in tiles) {
+        foreach ((Vector2 position, TileId tileId) in tiles) {
             Vector2I cell = new((int)position.X, (int)position.Y);
-            switch (value) {
-                case TileId.Placeholder:
-                    tileMap.SetCell(
-                        cell,
-                        PlaceholderSourceId,
-                        _placeholderAtlasCoords
-                    );
-                    break;
+            int sourceId = tileId switch {
+                TileId.Tile3 => 3,
+                TileId.Tile4 => 4,
+            };
 
-                default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(tiles), value, "Unknown tile ID.");
-            }
+            Vector2I atlasCoords = GetAtlasCoords(cell, tiles);
+            tileMap.SetCell(cell, sourceId, atlasCoords);
         }
 
         return tileMap;
+    }
+
+    private static Vector2I GetAtlasCoords(
+        Vector2I cell,
+        Dictionary<Vector2, TileId> tiles
+    ) {
+        const int leftWallX = 0;
+        const int rightWallX = RoomTiles.TotalWidth - 1;
+        const int ceilingY = 0;
+        const int floorY = RoomTiles.TotalHeight - 1;
+
+        // Entrance shaft above the starting room.
+        if (cell.Y < ceilingY) {
+            bool isLeftSide = cell.X < RoomTiles.TotalWidth / 2;
+            return new Vector2I(isLeftSide ? 0 : 2, 1);
+        }
+
+        // Ceiling, including its two outer corners.
+        if (cell.Y == ceilingY) {
+            int atlasX = cell.X == leftWallX ? 0
+                : cell.X == rightWallX ? 2
+                : 1;
+
+            return new Vector2I(atlasX, 0);
+        }
+
+        // Floor, including its two outer corners.
+        if (cell.Y == floorY) {
+            int atlasX = cell.X == leftWallX ? 0
+                : cell.X == rightWallX ? 2
+                : 1;
+
+            return new Vector2I(atlasX, 2);
+        }
+
+        if (cell.X == leftWallX) {
+            return new Vector2I(0, 1);
+        }
+
+        if (cell.X == rightWallX) {
+            return new Vector2I(2, 1);
+        }
+
+        // Interior platforms use the floor row.
+        // Use corner pieces for their exposed ends.
+        bool hasLeft = tiles.ContainsKey(
+            new Vector2(cell.X - 1, cell.Y));
+
+        bool hasRight = tiles.ContainsKey(
+            new Vector2(cell.X + 1, cell.Y));
+
+        int platformAtlasX = !hasLeft ? 0
+            : !hasRight ? 2
+            : 1;
+
+        return new Vector2I(platformAtlasX, 2);
     }
 }
