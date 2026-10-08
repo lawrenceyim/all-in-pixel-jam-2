@@ -37,5 +37,6 @@ public static class EventManager {
         await tree.ToSignal(tree, SceneTree.SignalName.ProcessFrame);
         tree.UnloadCurrentScene();
         tree.ChangeSceneToFile(Scenes.GetUid(SceneId.End));
+        _ = GlobalAudioPlayer.PlaySong(GlobalAudioPlayer.SongId.Ending);
     }
 }

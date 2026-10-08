@@ -6,6 +6,7 @@ public partial class TutorialRoom : Node {
     private Area2D _area;
 
     public override void _Ready() {
+        _ = GlobalAudioPlayer.PlaySong(GlobalAudioPlayer.SongId.Gameplay);
         _area.AreaEntered += area => {
             if (area.Owner is Player) {
                 Callable.From(() => {

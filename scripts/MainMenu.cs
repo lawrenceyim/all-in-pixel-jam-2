@@ -11,7 +11,7 @@ public partial class MainMenu : Node {
     public override void _Ready() {
         _startButton.Pressed += _StartGame;
         _exitButton.Pressed += () => { GetTree().Quit(); };
-        _ = GlobalAudioPlayer.PlaySong();
+        _ = GlobalAudioPlayer.PlaySong(GlobalAudioPlayer.SongId.Title);
         KeyBind.Initialize();
     }
 
