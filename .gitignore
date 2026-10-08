@@ -7,10 +7,6 @@ Export/
 # Mac
 .DS_STORE
 
-# Build output
-bin/
-obj/
-
 # Rider
 .idea/
 
@@ -21,3 +17,10 @@ obj/
 # User-specific files
 *.user
 *.suo
+
+# .NET build output
+**/bin/
+**/obj/
+
+# 2dog generated web build
+**/AppBundle/

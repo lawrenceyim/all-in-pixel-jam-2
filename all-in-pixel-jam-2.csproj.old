@@ -1,6 +1,7 @@
 <Project Sdk="Godot.NET.Sdk/4.7.2">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net10.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <!--        <PublishAot>true</PublishAot>-->
         <RootNamespace>allinpixeljam2</RootNamespace>
@@ -17,12 +18,4 @@
         <DefineConstants>$(DefineConstants);TWODOG_WEB_BOOT</DefineConstants>
         <DefaultItemExcludes>$(DefaultItemExcludes);all-in-pixel-jam-2.2dog/**</DefaultItemExcludes>
     </PropertyGroup>
-    <!-- added by the 2dog tool: properties 2dog hosts need that were not already set -->
-    <PropertyGroup>
-        <DefaultItemExcludes>$(DefaultItemExcludes);all-in-pixel-jam-2.web/**</DefaultItemExcludes>
-    </PropertyGroup>
-    <!-- added by the 2dog tool: compiles the web bootstrap (in the web host folder) into this game assembly -->
-    <ItemGroup>
-        <Compile Include="all-in-pixel-jam-2.web/TwoDogWebBoot.cs" Condition="Exists('$(MSBuildThisFileDirectory)all-in-pixel-jam-2.web/TwoDogWebBoot.cs')" />
-    </ItemGroup>
 </Project>

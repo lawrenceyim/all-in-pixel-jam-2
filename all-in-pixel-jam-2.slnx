@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="ExportDebug" />
+    <BuildType Name="ExportRelease" />
+  </Configurations>
+  <Project Path="all-in-pixel-jam-2.2dog/all-in-pixel-jam-2.2dog.csproj">
+    <BuildType Project="Debug" />
+  </Project>
+  <Project Path="all-in-pixel-jam-2.csproj" />
+  <Project Path="all-in-pixel-jam-2.web/all-in-pixel-jam-2.web.csproj">
+    <BuildType Project="Debug" />
+    <Build Project="false" />
+  </Project>
+</Solution>
