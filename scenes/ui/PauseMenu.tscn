@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bhpl2mx8yk1x4"]
+
+[ext_resource type="Script" uid="uid://boap1lki6clu3" path="res://scripts/PauseMenu.cs" id="1_7ida2"]
+[ext_resource type="Texture2D" uid="uid://bx6ajlou4dqb" path="res://assets/sprites/PauseMenu.png" id="2_n5dsq"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=974035602 node_paths=PackedStringArray("_musicSlider", "_sfxSlider")]
+offset = Vector2(128, 112)
+transform = Transform2D(1, 0, 0, 1, 128, 112)
+script = ExtResource("1_7ida2")
+_musicSlider = NodePath("PauseMenu/Overlay/Node2D/HSlider Music")
+_sfxSlider = NodePath("PauseMenu/Overlay/Node2D2/HSlider Sound")
+
+[node name="PauseMenu" type="Sprite2D" parent="." unique_id=284865269]
+texture = ExtResource("2_n5dsq")
+
+[node name="Overlay" type="Node2D" parent="PauseMenu" unique_id=2108539192]
+position = Vector2(0, -25.035)
+
+[node name="Node2D" type="Node2D" parent="PauseMenu/Overlay" unique_id=435953820]
+
+[node name="HSlider Music" type="HSlider" parent="PauseMenu/Overlay/Node2D" unique_id=814892668]
+offset_right = 82.0
+offset_bottom = 16.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="PauseMenu/Overlay/Node2D" unique_id=160057514]
+offset_left = -78.975
+offset_right = -32.975
+offset_bottom = 23.0
+text = "Music"
+metadata/_edit_use_anchors_ = true
+
+[node name="Node2D2" type="Node2D" parent="PauseMenu/Overlay" unique_id=843885698]
+position = Vector2(0, 19.315)
+
+[node name="HSlider Sound" type="HSlider" parent="PauseMenu/Overlay/Node2D2" unique_id=582874494]
+offset_right = 82.0
+offset_bottom = 16.0
+
+[node name="Label" type="Label" parent="PauseMenu/Overlay/Node2D2" unique_id=773451009]
+offset_left = -78.975
+offset_right = -32.975
+offset_bottom = 23.0
+text = "Sound"
+
+[node name="Label" type="Label" parent="PauseMenu/Overlay" unique_id=2042179820]
+offset_left = -75.0
+offset_top = -40.525
+offset_right = 75.0
+offset_bottom = -17.525002
+text = "Volume"
+horizontal_alignment = 1

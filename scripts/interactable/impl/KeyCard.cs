@@ -20,6 +20,17 @@ public partial class KeyCard : Area2D, IInteractable {
     [Export]
     private AudioStream _keyCardFoundSfx;
 
+    private AudioPlayerDto _audioPlayerDto;
+
+    public override void _Ready() {
+        _audioPlayerDto = new AudioPlayerDto(_sfxPlayer);
+        AudioManager.AddAudioStreamPlayer(_audioPlayerDto);
+    }
+
+    public override void _ExitTree() {
+        AudioManager.RemoveAudioStreamPlayer(_audioPlayerDto);
+    }
+
     public void SetColor(Color color) {
         _color = color;
         string uid = color switch {

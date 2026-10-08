@@ -36,6 +36,7 @@ public partial class Door : Area2D, IInteractable {
     private Doors.DoorId _id;
 
     private List<KeyCard.Color> _colors = [];
+    private AudioPlayer _audioPlayerDto;
 
     private enum Animation {
         Open,
@@ -45,7 +46,14 @@ public partial class Door : Area2D, IInteractable {
     private const string Open = "open";
     private const string Close = "close";
 
-    public override void _Ready() { }
+    public override void _Ready() {
+        _audioPlayerDto = new AudioPlayer2DDto(_sfxPlayer);
+        AudioManager.AddAudioStreamPlayer(_audioPlayerDto);
+    }
+
+    public override void _ExitTree() {
+        AudioManager.RemoveAudioStreamPlayer(_audioPlayerDto);
+    }
 
     public void Init(Doors.DoorId id, List<KeyCard.Color> colors) {
         _id = id;

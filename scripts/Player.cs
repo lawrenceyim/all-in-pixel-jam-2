@@ -1,7 +1,6 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AddOns.Repository;
 using Godot;
@@ -92,9 +91,12 @@ public partial class Player : Node2D {
     private double _jumpTimeLeft = 0;
     private IInteractable? _interactable;
     private int _jumpsLeft = 1;
+    private AudioPlayer _sfxPlayerDto;
 
     private Dictionary<State, IPlayerState> _states = new();
+    private string _pauseMenuUid = "uid://bhpl2mx8yk1x4";
     private IPlayerState _state;
+    private PauseMenu? _pauseMenu;
 
     public override void _Ready() {
         KeyBind.Initialize(); // TODO: Refactor and move elsewhere
@@ -110,6 +112,14 @@ public partial class Player : Node2D {
         _playerSprite.Play();
 
         _InitKeyCardsFound();
+
+
+        _sfxPlayerDto = new AudioPlayer2DDto(_sfxPlayer);
+        AudioManager.AddAudioStreamPlayer(_sfxPlayerDto);
+    }
+
+    public override void _ExitTree() {
+        AudioManager.RemoveAudioStreamPlayer(_sfxPlayerDto);
     }
 
     public override void _Process(double delta) {
@@ -350,6 +360,24 @@ public partial class Player : Node2D {
         }
     }
 
+    // This probably shouldn't be here
+    private void _Pause() {
+        if (!Input.IsActionJustPressed(KeyBind.Escape)) {
+            return;
+        }
+
+        if (_pauseMenu is null) {
+            PackedScene scene = GD.Load<PackedScene>(_pauseMenuUid);
+            PauseMenu pauseMenu = scene.Instantiate<PauseMenu>();
+            GetTree().CurrentScene.AddChild(pauseMenu);
+            _pauseMenu = pauseMenu;
+            return;
+        }
+
+        _pauseMenu.QueueFree();
+        _pauseMenu = null;
+    }
+
     #endregion
 
     #region States
@@ -372,6 +400,7 @@ public partial class Player : Node2D {
         public void Exit() { }
 
         public void Process(double delta) {
+            player._Pause();
             player.HorizontalMovementInput();
             player._JumpInput();
             player._InteractionInput(); // Must be kept at end or else it causes edge case where door animation is started but other code in Process override and soft locks player
@@ -405,6 +434,8 @@ public partial class Player : Node2D {
         }
 
         public void Process(double delta) {
+            player._Pause();
+
             player.HorizontalMovementInput();
             player._JumpInput();
 
@@ -440,6 +471,8 @@ public partial class Player : Node2D {
         public void Exit() { }
 
         public void Process(double delta) {
+            player._Pause();
+
             player.HorizontalMovementInput();
             player._JumpInput();
             player._FlipPlayerSprite();
@@ -495,7 +528,10 @@ public partial class Player : Node2D {
             _active = false;
         }
 
-        public void Process(double delta) { }
+        public void Process(double delta) {
+            player._Pause();
+        }
+
         public void PhysicsProcess(double delta) { }
     }
 
